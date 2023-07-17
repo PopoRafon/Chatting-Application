@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{% static 'styles/main.css' %}" rel="stylesheet">
+    <title>
+        {% block title %}
+
+        {% endblock %}
+    </title>
+</head>
+<body class="bg-gradient-to-l from-sky-200 from-10% via-indigo-200 via-50% to-fuchsia-200 to-90%">
+    {% include 'navbar.html' %}
+
+    {% block content %}
+    
+    {% endblock %}
+
+</body>
+</html>
