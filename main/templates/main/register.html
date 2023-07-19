@@ -1,0 +1,33 @@
+{% extends 'main.html' %}
+
+{% load form_filters %}
+
+{% block title %}
+    Register
+{% endblock %}
+
+{% block content %}
+    <main class="flex-grow flex items-center justify-center">
+        <div class="border border-neutral-300/40 bg-white/30 py-9 px-12 rounded-lg">
+            <form method="POST" class="flex flex-col items-center" novalidate>
+                {% csrf_token %}
+                
+                {% for field in form %}
+                    {% if field.name == "checkbox" %}
+                        <div class="inline items-center">
+                            {{ field|add_class_attributes:"cursor-pointer w-4 h-4 align-middle" }}
+                            <label for="{{ field.name }}">I agree to <a href="#" class="text-blue-600 hover:text-blue-400">Terms Of Service</a></label>
+                        </div>
+                    {% else %}
+                        <div class="flex flex-col items-center">
+                            <label for="{{ field.name }}">{{ field.label }}</label>
+                            {{ field|add_class_attributes:"rounded-lg py-1 px-2 mt-1 mb-5 w-80" }}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+                
+                <input type="submit" name="submit" value="Submit" class="rounded-full px-4 py-1 mt-6 cursor-pointer border border-indigo-400 bg-gradient-to-br from-sky-300/95 from-10% via-indigo-300/95 via-50% to-fuchsia-300/95 to-90% hover:from-sky-300/95 hover:via-indigo-200/95 hover:to-fuchsia-300/95">
+            </form>
+        </div>
+    </main>
+{% endblock %}

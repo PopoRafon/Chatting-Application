@@ -10,3 +10,12 @@ class TestHomeUrls(SimpleTestCase):
         resolver = resolve(url)
 
         self.assertEquals(resolver.func.view_class, views.HomeView)
+
+
+class TestAccountUrls(SimpleTestCase):
+
+    def test_register_url_resolves(self):
+        url = reverse('register')
+        resolver = resolve(url)
+
+        self.assertEquals(resolver.func.view_class, views.RegisterView)
