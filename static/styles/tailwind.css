@@ -9,4 +9,14 @@
     h3 {
         @apply text-2xl;
     }
+    .standard-form-input {
+        @apply text-black;
+        @apply border-slate-400;
+        @apply ring-slate-400;
+    }
+    .invalid-form-input {
+        @apply text-pink-600;
+        @apply border-pink-500;
+        @apply ring-pink-500;
+    }
 }

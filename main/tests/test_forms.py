@@ -10,7 +10,6 @@ class TestAccountForms(TestCase):
             'username': 'testusername',
             'password1': 'testpassword',
             'password2': 'testpassword',
-            'checkbox': True
         })
 
         self.assertTrue(form.is_valid())
@@ -19,4 +18,4 @@ class TestAccountForms(TestCase):
         form = RegistrationForm(data={})
 
         self.assertFalse(form.is_valid())
-        self.assertEquals(len(form.errors), 5)
+        self.assertEquals(len(form.errors), 4)

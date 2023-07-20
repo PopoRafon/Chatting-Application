@@ -38,17 +38,13 @@ class TestAccountViews(TestCase):
         self.assertEquals(response.status_code, 302)
         self.assertRedirects(response, reverse('home'))
 
-    def test_register_view_POST_create_new_user(self):
-        response = self.client.post(self.register_url, data={
-            'email': 'testemail@gmail.com',
-            'username': 'testusername',
-            'password1': 'testpassword',
-            'password2': 'testpassword',
-            'checkbox': True
-        })
+    def test_register_view_POST_authenticated_user(self):
+        user = User.objects.create(username='user')
+
+        self.client.force_login(user)
+        response = self.client.post(self.register_url, data={})
 
         self.assertEquals(response.status_code, 302)
-        self.assertEquals(User.objects.count(), 1)
         self.assertRedirects(response, reverse('home'))
 
     def test_register_view_POST_invalid_data(self):
@@ -56,3 +52,15 @@ class TestAccountViews(TestCase):
 
         self.assertEquals(response.status_code, 200)
         self.assertEquals(User.objects.count(), 0)
+
+    def test_register_view_POST_create_new_user(self):
+        response = self.client.post(self.register_url, data={
+            'email': 'testemail@gmail.com',
+            'username': 'testusername',
+            'password1': 'testpassword',
+            'password2': 'testpassword',
+        })
+
+        self.assertEquals(response.status_code, 302)
+        self.assertEquals(User.objects.count(), 1)
+        self.assertRedirects(response, reverse('home'))

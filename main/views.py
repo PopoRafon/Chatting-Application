@@ -4,6 +4,7 @@ from .forms import RegistrationForm
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
 from django.contrib.auth import login, authenticate
+from django.http.response import JsonResponse
 
 
 class HomeView(TemplateView):
@@ -21,6 +22,9 @@ class RegisterView(CreateView):
             return redirect('home')
         return super().dispatch(request, *args, **kwargs)
     
+    def form_invalid(self, form):
+        return JsonResponse({'errors': form.errors})
+
     def form_valid(self, form):
         response = super().form_valid(form)
         
