@@ -13,11 +13,11 @@ class TestHomeViews(TestCase):
     def test_home_view_GET(self):
         response = self.client.get(self.home_url)
 
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'main/home.html')
         
 
-class TestAccountViews(TestCase):
+class TestRegisterView(TestCase):
 
     def setUp(self):
         self.client = Client()
@@ -26,7 +26,7 @@ class TestAccountViews(TestCase):
     def test_register_view_GET(self):
         response = self.client.get(self.register_url)
 
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'main/register.html')
 
     def test_register_view_GET_authenticated_user(self):
@@ -35,7 +35,7 @@ class TestAccountViews(TestCase):
         self.client.force_login(user)
         response = self.client.get(self.register_url)
 
-        self.assertEquals(response.status_code, 302)
+        self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, reverse('home'))
 
     def test_register_view_POST_authenticated_user(self):
@@ -44,14 +44,14 @@ class TestAccountViews(TestCase):
         self.client.force_login(user)
         response = self.client.post(self.register_url, data={})
 
-        self.assertEquals(response.status_code, 302)
+        self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, reverse('home'))
 
     def test_register_view_POST_invalid_data(self):
         response = self.client.post(self.register_url, data={})
 
-        self.assertEquals(response.status_code, 200)
-        self.assertEquals(User.objects.count(), 0)
+        self.assertEqual(response.status_code, 422)
+        self.assertEqual(User.objects.count(), 0)
 
     def test_register_view_POST_create_new_user(self):
         response = self.client.post(self.register_url, data={
@@ -61,6 +61,50 @@ class TestAccountViews(TestCase):
             'password2': 'testpassword',
         })
 
-        self.assertEquals(response.status_code, 302)
-        self.assertEquals(User.objects.count(), 1)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(User.objects.count(), 1)
+        self.assertRedirects(response, reverse('home'))
+
+
+class TestLoginView(TestCase):
+
+    def setUp(self):
+        self.client = Client()
+        self.user = User.objects.create_user(username='test', password='testpassword')
+        self.login_url = reverse('login')
+
+    def test_login_view_GET(self):
+        response = self.client.get(self.login_url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'main/login.html')
+
+    def test_login_view_GET_authenticated_user(self):
+        self.client.force_login(self.user)
+        response = self.client.get(self.login_url)
+
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse('home'))
+
+    def test_login_view_POST_login_user_to_account(self):
+        response = self.client.post(self.login_url, data={
+            'username': 'test',
+            'password': 'testpassword'
+        })
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(int(self.client.session['_auth_user_id']), self.user.pk)
+        self.assertRedirects(response, reverse('home'))
+
+    def test_login_view_POST_invalid_data(self):
+        response = self.client.post(self.login_url, data={})
+
+        self.assertEqual(response.status_code, 422)
+        self.assertNotIn('_auth_user_id', self.client.session)
+
+    def test_login_view_POST_authenticated_user(self):
+        self.client.force_login(self.user)
+        response = self.client.post(self.login_url, data={})
+
+        self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, reverse('home'))

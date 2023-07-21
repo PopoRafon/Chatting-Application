@@ -3,8 +3,8 @@
 {% load static %}
 {% load form_filters %}
 
-{% block title %}
-    Register
+{% block titlte %}
+    Login
 {% endblock %}
 
 {% block content %}
@@ -22,12 +22,12 @@
                         </p>
                     </div>
                 {% endfor %}
-                
-                <p class="text-center text-sm mt-2">
-                    By clicking the "Submit" button, you <br> acknowledge and agree to <a href="#" class="text-sky-600 hover:text-sky-500">Terms Of Service</a>
-                </p>
 
-                <input type="submit" name="submit" value="Submit" class="rounded-full px-4 py-1 mt-6 cursor-pointer border border-indigo-400 bg-gradient-to-br from-sky-300/95 from-10% via-indigo-300/95 via-50% to-fuchsia-300/95 to-90% hover:from-sky-300/95 hover:via-indigo-200/95 hover:to-fuchsia-300/95">
+            <p class="text-center text-sm mt-2">
+                Forgot <a href="#" class="text-sky-600 hover:text-sky-500">password?</a>
+            </p>
+
+            <input type="submit" name="submit" value="Login" class="rounded-full px-4 py-1 mt-6 cursor-pointer border border-indigo-400 bg-gradient-to-br from-sky-300/95 from-10% via-indigo-300/95 via-50% to-fuchsia-300/95 to-90% hover:from-sky-300/95 hover:via-indigo-200/95 hover:to-fuchsia-300/95">
             </form>
         </div>
     </main>

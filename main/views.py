@@ -1,6 +1,7 @@
 from django.views.generic import TemplateView, CreateView
+from django.contrib.auth.views import LoginView
 from django.contrib.auth.models import User
-from .forms import RegistrationForm
+from .forms import RegistrationForm, LoginForm
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
 from django.contrib.auth import login, authenticate
@@ -23,7 +24,7 @@ class RegisterView(CreateView):
         return super().dispatch(request, *args, **kwargs)
     
     def form_invalid(self, form):
-        return JsonResponse({'errors': form.errors})
+        return JsonResponse({'errors': form.errors}, status=422)
 
     def form_valid(self, form):
         response = super().form_valid(form)
@@ -36,3 +37,17 @@ class RegisterView(CreateView):
             login(self.request, user)
 
         return response
+
+
+class LoginView(LoginView):
+    form_class = LoginForm
+    template_name = 'main/login.html'
+    redirect_authenticated_user = True
+    next_page = reverse_lazy('home') # Placeholder for redirect to chat application view
+
+    def form_invalid(self, form):
+        if form.errors.get('__all__'):
+            form.errors.pop('__all__')
+            form.errors['username'] = ["Credentials you provide are invalid."]
+            form.errors['password'] = ["Credentials you provide are invalid."]
+        return JsonResponse({'errors': form.errors}, status=422)

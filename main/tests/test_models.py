@@ -9,5 +9,5 @@ class TestUserModels(TestCase):
         self.user = User.objects.create(username='test')
 
     def test_profile_is_created_when_user_gets_created(self):
-        self.assertEquals(Profile.objects.count(), 1)
-        self.assertEquals(Profile.objects.first().user, self.user)
+        self.assertEqual(Profile.objects.count(), 1)
+        self.assertEqual(Profile.objects.first().user, self.user)

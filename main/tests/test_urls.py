@@ -9,7 +9,7 @@ class TestHomeUrls(SimpleTestCase):
         url = reverse('home')
         resolver = resolve(url)
 
-        self.assertEquals(resolver.func.view_class, views.HomeView)
+        self.assertEqual(resolver.func.view_class, views.HomeView)
 
 
 class TestAccountUrls(SimpleTestCase):
@@ -18,4 +18,10 @@ class TestAccountUrls(SimpleTestCase):
         url = reverse('register')
         resolver = resolve(url)
 
-        self.assertEquals(resolver.func.view_class, views.RegisterView)
+        self.assertEqual(resolver.func.view_class, views.RegisterView)
+
+    def test_login_url_resolves(self):
+        url = reverse('login')
+        resolver = resolve(url)
+
+        self.assertEqual(resolver.func.view_class, views.LoginView)
