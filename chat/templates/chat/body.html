@@ -1,0 +1,15 @@
+{% extends 'main.html' %}
+
+{% block body %}
+    <body class="flex bg-zinc-900/90 text-white/90">
+        {% include 'chat/navbar.html' %}
+
+        {% block content %}
+        
+        {% endblock %}
+        
+        {% block scripts %}
+
+        {% endblock %}
+    </body>
+{% endblock %}

@@ -16,11 +16,11 @@ class RegisterView(CreateView):
     model = User
     form_class = RegistrationForm
     template_name = 'main/register.html'
-    success_url = reverse_lazy('home') # Placeholder for redirect to chat application view
+    success_url = reverse_lazy('chat')
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            return redirect('home')
+            return redirect('chat')
         return super().dispatch(request, *args, **kwargs)
     
     def form_invalid(self, form):
@@ -43,8 +43,8 @@ class LoginView(LoginView):
     form_class = LoginForm
     template_name = 'main/login.html'
     redirect_authenticated_user = True
-    next_page = reverse_lazy('home') # Placeholder for redirect to chat application view
-
+    next_page = reverse_lazy('chat')
+    
     def form_invalid(self, form):
         if form.errors.get('__all__'):
             form.errors.pop('__all__')

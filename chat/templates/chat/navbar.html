@@ -1,0 +1,24 @@
+{% load static %}
+
+<nav class="flex flex-col overflow-y-auto invisible-scrollbar items-center top-0 left-0 z-40 w-20 h-screen transition-transform -translate-x-full sm:translate-x-0 bg-zinc-800/90 border-r border-zinc-700/30">
+    <ul>
+        <li class="flex justify-center my-3">
+            <a href="{% url 'chat' %}" class="rounded-full">
+                <img src="{% static 'images/buttons/user_chats.png' %}" class="w-12 h-12 rounded-full">
+            </a>
+        </li>
+        <hr class="border-zinc-600/60">
+        {% for channel in request.user.channels %} <!-- Placeholder for user channels -->
+            <li class="flex justify-center my-3">
+                <a href="#" class="rounded-full">
+                    <img src="{% static 'images/buttons/default_channel_icon.png' %}" class="w-12 h-12 rounded-full">
+                </a>
+            </li>
+        {% endfor %}
+        <li class="flex justify-center my-3">
+            <a href="#" class="rounded-full">
+                <img src="{% static 'images/buttons/add_new_channel.png' %}" class="w-12 h-12 rounded-full">
+            </a>
+        </li>
+    </ul>
+</nav>

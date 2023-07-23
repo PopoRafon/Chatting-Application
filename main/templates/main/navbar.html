@@ -1,6 +1,6 @@
 {% load static %}
 
-<nav class="sticky top-0 w-full flex transition-colors z-50 border-b border-neutral-300/30 bg-white/20 justify-between">
+<nav class="sticky top-0 w-full flex transition-colors z-40 border-b border-neutral-300/30 bg-white/20 justify-between">
     <div class="flex py-3 px-5">
         <a href="{% url 'home' %}" class="hover:text-sky-400">
             <!-- Placeholder for logo -->
@@ -11,7 +11,7 @@
         <ul class="flex space-x-4">
             {% if request.user.is_authenticated %}
                 <li>
-                    <a href="#" class="rounded-full p-2 border border-indigo-400 bg-gradient-to-br from-sky-300/95 from-10% via-indigo-300/95 via-50% to-fuchsia-300/95 to-90% hover:from-sky-300/95 hover:via-indigo-200/95 hover:to-fuchsia-300/95">
+                    <a href="{% url 'chat' %}" class="rounded-full p-2 border border-indigo-400 bg-gradient-to-br from-sky-300/95 from-10% via-indigo-300/95 via-50% to-fuchsia-300/95 to-90% hover:from-sky-300/95 hover:via-indigo-200/95 hover:to-fuchsia-300/95">
                         Open Discord
                     </a>
                 </li>
