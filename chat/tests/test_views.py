@@ -7,7 +7,7 @@ class TestChatViews(TestCase):
 
     def setUp(self):
         self.client = Client()
-        self.chat_url = reverse('chat')
+        self.chat_url = reverse('chat-home')
 
     def test_chat_view_GET(self):
         response = self.client.get(self.chat_url)
@@ -22,4 +22,4 @@ class TestChatViews(TestCase):
         response = self.client.get(self.chat_url)
 
         self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response, 'chat/chat.html')
+        self.assertTemplateUsed(response, 'chat/chat_home.html')

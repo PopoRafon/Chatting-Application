@@ -6,8 +6,8 @@ from chat import views
 class TestChatUrls(SimpleTestCase):
 
     def test_chat_url_resolves(self):
-        url = reverse('chat')
+        url = reverse('chat-home')
 
         resolver = resolve(url)
 
-        self.assertEqual(resolver.func.view_class, views.ChatView)
+        self.assertEqual(resolver.func.view_class, views.ChatHomeView)

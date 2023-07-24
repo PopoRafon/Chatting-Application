@@ -1,5 +1,7 @@
 {% extends 'main.html' %}
 
+{% load static %}
+
 {% block body %}
     <body class="flex bg-zinc-900/90 text-white/90">
         {% include 'chat/navbar.html' %}
@@ -8,6 +10,9 @@
         
         {% endblock %}
         
+        {{ room_name|json_script:"room-name" }}
+        <script src="{% static 'js/chat/sockets.js' %}"></script>
+
         {% block scripts %}
 
         {% endblock %}

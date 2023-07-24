@@ -36,7 +36,7 @@ class TestRegisterView(TestCase):
         response = self.client.get(self.register_url)
 
         self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, reverse('chat'))
+        self.assertRedirects(response, reverse('chat-home'))
 
     def test_register_view_POST_authenticated_user(self):
         user = User.objects.create(username='user')
@@ -45,7 +45,7 @@ class TestRegisterView(TestCase):
         response = self.client.post(self.register_url, data={})
 
         self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, reverse('chat'))
+        self.assertRedirects(response, reverse('chat-home'))
 
     def test_register_view_POST_invalid_data(self):
         response = self.client.post(self.register_url, data={})
@@ -63,7 +63,7 @@ class TestRegisterView(TestCase):
 
         self.assertEqual(response.status_code, 302)
         self.assertEqual(User.objects.count(), 1)
-        self.assertRedirects(response, reverse('chat'))
+        self.assertRedirects(response, reverse('chat-home'))
 
 
 class TestLoginView(TestCase):
@@ -84,7 +84,7 @@ class TestLoginView(TestCase):
         response = self.client.get(self.login_url)
 
         self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, reverse('chat'))
+        self.assertRedirects(response, reverse('chat-home'))
 
     def test_login_view_POST_login_user_to_account(self):
         response = self.client.post(self.login_url, data={
@@ -94,7 +94,7 @@ class TestLoginView(TestCase):
 
         self.assertEqual(response.status_code, 302)
         self.assertEqual(int(self.client.session['_auth_user_id']), self.user.pk)
-        self.assertRedirects(response, reverse('chat'))
+        self.assertRedirects(response, reverse('chat-home'))
 
     def test_login_view_POST_invalid_data(self):
         response = self.client.post(self.login_url, data={})
@@ -107,4 +107,4 @@ class TestLoginView(TestCase):
         response = self.client.post(self.login_url, data={})
 
         self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, reverse('chat'))
+        self.assertRedirects(response, reverse('chat-home'))

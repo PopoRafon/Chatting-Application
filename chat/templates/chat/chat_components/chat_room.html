@@ -1,0 +1,26 @@
+{% extends 'chat/chat_components/chat_base.html' %}
+
+{% load static %}
+
+{% block title %}
+    Discord | {{ room_name }}
+{% endblock %}
+
+{% block main %}
+    <div class="flex items-center text-lg top-0 w-full h-14 px-5 border-b border-zinc-700/30 bg-zinc-800/40">
+        <img src="{% static 'images/avatar.png' %}" class="rounded-full h-8 w-8 mr-2">
+        <a href="#" class="hover:text-white">
+            Test
+        </a>
+    </div>
+    <div class="flex w-full justify-center">
+        <div id="messages-container">
+            <p>Test</p>
+        </div>
+        <!-- <input type="text" placeholder="Send message to ..."> -->
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'js/chat/chat_room.js' %}"></script>
+{% endblock %}
