@@ -8,7 +8,7 @@
             </a>
         </li>
         <hr class="border-zinc-600/60">
-        {% for channel in request.user.channels %} <!-- Placeholder for user channels -->
+        {% for channel in request.user.channels.all %} <!-- Placeholder for user channels -->
             <li class="flex justify-center my-3">
                 <a href="#" class="rounded-full">
                     <img src="{% static 'images/buttons/default_channel_icon.png' %}" class="w-12 h-12 rounded-full">

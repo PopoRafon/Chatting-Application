@@ -30,3 +30,24 @@
         scrollbar-width: none;
     }
 }
+
+::-webkit-scrollbar {
+    @apply w-3;
+}
+  
+::-webkit-scrollbar-track {
+    @apply bg-none;
+}
+  
+::-webkit-scrollbar-thumb {
+    @apply bg-zinc-600;
+    @apply rounded-full;
+}
+  
+::-webkit-scrollbar-thumb:hover {
+    @apply bg-zinc-700/90;
+}
+
+::-webkit-scrollbar-thumb:active {
+    @apply bg-zinc-800;
+}

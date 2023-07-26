@@ -3,21 +3,54 @@
 {% load static %}
 
 {% block title %}
-    Discord | {{ room_name }}
+    Discord | {{ id }}
 {% endblock %}
 
 {% block main %}
-    <div class="flex items-center text-lg top-0 w-full h-14 px-5 border-b border-zinc-700/30 bg-zinc-800/40">
-        <img src="{% static 'images/avatar.png' %}" class="rounded-full h-8 w-8 mr-2">
-        <a href="#" class="hover:text-white">
-            Test
-        </a>
-    </div>
-    <div class="flex w-full justify-center">
-        <div id="messages-container">
-            <p>Test</p>
+    <div class="flex flex-col h-screen w-4/5">
+        <div class="flex items-center text-lg top-0 w-full h-16 px-5 border-b border-zinc-700/30 bg-zinc-800/30">
+            <img src="{% static 'images/avatar.png' %}" class="rounded-full h-8 w-8 mr-2">
+            <a href="#" class="hover:text-white text-xl">{{ opposite_user.username }}</a>
         </div>
-        <!-- <input type="text" placeholder="Send message to ..."> -->
+        <ul id="messages-container" class="flex flex-1 flex-col-reverse overflow-y-auto w-full text-left px-2">
+            {% for message in chat.messages.all %}
+                <li class="flex rounded-xl hover:bg-zinc-800/30 px-2 mt-3">
+                    <div class="top-0 left-0 h-full w-14 mr-3">
+                        <img src="{{ message.sender.profile.avatar.url }}" class="rounded-full h-12 w-12">
+                    </div>
+                    <div class="w-full">
+                        <div class="block">
+                            <span class="cursor-pointer hover:underline">{{ message.sender }}</span>
+                            <span class="text-sm text-zinc-500">{{ message.created|timesince }}</span>
+                        </div>
+                        <p class="block text-base break-all">{{ message.body }}</p>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+        <div class="max-h-screen flex justify-center mt-auto bottom-0 py-7 w-full">
+            <div class="flex justify-center w-2/3">
+                <textarea id="message-input" placeholder="Send message to {{ opposite_user.username }}" class="rounded-xl p-3 bg-zinc-700 w-full resize-none invisible-scrollbar" rows="1"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="flex flex-col max-h-screen grow h-screen text-center py-5 border border-zinc-700/30 bg-zinc-800/30">
+        <div class="flex justify-center">
+            <img src="{{ opposite_user.profile.avatar.url }}" class="rounded-full h-20 w-20 mr-2">
+        </div>
+        <div class="flex justify-center">
+            <ul>
+                <li class="text-2xl">
+                    {{ opposite_user.username }}
+                </li>
+                <li class="text-xl">
+                    {{ opposite_user.username }}#{{ opposite_user.pk }} <!-- Placeholder for opposite users username with his id -->
+                </li>
+                <li>
+                    Description <!-- Placeholder for opposite users description -->
+                </li>
+            </ul>
+        </div>
     </div>
 {% endblock %}
 

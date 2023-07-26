@@ -3,24 +3,20 @@
 {% load static %}
 
 {% block content %}
-    <main class="flex grow">
-        <div class="flex flex-col overflow-y-auto invisible-scrollbar items-center top-0 left-0 w-60 h-screen transition-transform -translate-x-full sm:translate-x-0 border-r border-zinc-700/30 bg-zinc-800/20">
+    <main class="flex w-full">
+        <div class="flex flex-col overflow-y-auto invisible-scrollbar items-center top-0 left-0 w-80 h-screen transition-transform -translate-x-full sm:translate-x-0 border-r border-zinc-700/30 bg-zinc-800/20">
             <div class="w-full">
                 <div class="flex justify-center my-3">
-                    <input type="text" placeholder="Search for conversation" class="rounded-full py-1 px-2 placeholder:text-center focus:placeholder:text-transparent focus:outline-none bg-zinc-700/70">
+                    <input type="text" placeholder="Search for conversation" class="rounded-full py-1 px-3 placeholder:text-center focus:placeholder:text-transparent focus:outline-none bg-zinc-700/70">
                 </div>
                 <div>
-                    <p class="flex justify-center mb-3">
-                        Private messages
-                    </p>
+                    <p class="flex justify-center mb-3">Private messages</p>
                     <ul>
-                        {% for chat in request.user.chats %} <!-- Placeholder for user chats -->
+                        {% for chat in request.user.chats.all %}
                             <li class="flex justify-center">
-                                <a href="#" class="flex justify-left items-center w-full py-2 pl-3 pr-10 hover:bg-zinc-700/30">
-                                    <img src="{% static 'images/avatar.png' %}" class="rounded-full h-8 w-8 mr-2">
-                                    <p class="truncate text-sm">
-                                        Test
-                                    </p>
+                                <a href="{% url 'chat-room' chat.pk %}" class="flex justify-left items-center w-full py-2 pl-3 pr-10 hover:bg-zinc-700/30">
+                                    <img src="{% static 'images/avatar.png' %}" class="rounded-full h-8 w-8 mr-2"> <!-- Placeholder for users avatar -->
+                                    <p class="truncate text-md">Test</p> <!-- Placeholder for users username -->
                                 </a>
                             </li>
                         {% endfor %}
@@ -28,7 +24,7 @@
                 </div>
             </div>
         </div>
-        <div class="grow">
+        <div class="flex h-screen w-full">
             {% block main %}
 
             {% endblock %}

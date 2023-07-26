@@ -3,14 +3,14 @@
 {% load static %}
 
 {% block body %}
-    <body class="flex bg-zinc-900/90 text-white/90">
+    <body class="flex bg-zinc-900/90 text-white/90 text-lg">
         {% include 'chat/navbar.html' %}
 
         {% block content %}
         
         {% endblock %}
         
-        {{ room_name|json_script:"room-name" }}
+        {{ id|json_script:"room-name" }}
         <script src="{% static 'js/chat/sockets.js' %}"></script>
 
         {% block scripts %}
