@@ -8,8 +8,7 @@ class Chat(models.Model):
 
 class ChatMessage(models.Model):
     chat = models.ForeignKey(Chat, related_name='messages', on_delete=models.CASCADE)
-    sender = models.ForeignKey(User, related_name='messages_sent', on_delete=models.CASCADE)
-    receiver = models.ForeignKey(User, related_name='messages_received', on_delete=models.CASCADE)
+    sender = models.ForeignKey(User, related_name='chat_messages', on_delete=models.CASCADE)
     body = models.TextField(max_length=512)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
@@ -24,6 +23,7 @@ class Channel(models.Model):
 
 class ChannelMessage(models.Model):
     channel = models.ForeignKey(Channel, related_name='messages', on_delete=models.CASCADE)
+    sender = models.ForeignKey(User, related_name='channel_messages', on_delete=models.CASCADE)
     body = models.TextField(max_length=512)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)

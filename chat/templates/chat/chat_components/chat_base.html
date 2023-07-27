@@ -16,7 +16,13 @@
                             <li class="flex justify-center">
                                 <a href="{% url 'chat-room' chat.pk %}" class="flex justify-left items-center w-full py-2 pl-3 pr-10 hover:bg-zinc-700/30">
                                     <img src="{% static 'images/avatar.png' %}" class="rounded-full h-8 w-8 mr-2"> <!-- Placeholder for users avatar -->
-                                    <p class="truncate text-md">Test</p> <!-- Placeholder for users username -->
+                                    <p class="truncate text-md">
+                                        {% for user in chat.users.all %}
+                                            {% if user != request.user %}
+                                                {{ user.username }}
+                                            {% endif %}
+                                        {% endfor %}
+                                    </p>
                                 </a>
                             </li>
                         {% endfor %}

@@ -15,11 +15,10 @@ class TestChatModels(TestCase):
         self.assertEqual(self.chat.users.count(), 2)
 
     def test_chat_message_is_added_correctly(self):
-        message = ChatMessage.objects.create(sender=self.first_user, receiver=self.second_user, chat=self.chat, body='test body')
+        message = ChatMessage.objects.create(sender=self.first_user, chat=self.chat, body='test body')
 
         self.assertEqual(self.chat.messages.count(), 1)
         self.assertEqual(self.chat.messages.first().sender, self.first_user)
-        self.assertEqual(self.chat.messages.first().receiver, self.second_user)
         self.assertEqual(self.chat.messages.first().body, 'test body')
 
 

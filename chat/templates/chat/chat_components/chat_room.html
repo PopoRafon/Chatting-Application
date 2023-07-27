@@ -1,6 +1,7 @@
 {% extends 'chat/chat_components/chat_base.html' %}
 
 {% load static %}
+{% load time_filters %}
 
 {% block title %}
     Discord | {{ id }}
@@ -21,9 +22,9 @@
                     <div class="w-full">
                         <div class="block">
                             <span class="cursor-pointer hover:underline">{{ message.sender }}</span>
-                            <span class="text-sm text-zinc-500">{{ message.created|timesince }}</span>
+                            <span class="text-sm text-zinc-500">{{ message.created|formatted_time }}</span>
                         </div>
-                        <p class="block text-base break-all">{{ message.body }}</p>
+                        <p class="block text-base break-all whitespace-pre-line">{{ message.body }}</p>
                     </div>
                 </li>
             {% endfor %}
@@ -44,7 +45,7 @@
                     {{ opposite_user.username }}
                 </li>
                 <li class="text-xl">
-                    {{ opposite_user.username }}#{{ opposite_user.pk }} <!-- Placeholder for opposite users username with his id -->
+                    {{ opposite_user.username }}#{{ opposite_user.pk }}
                 </li>
                 <li>
                     Description <!-- Placeholder for opposite users description -->
