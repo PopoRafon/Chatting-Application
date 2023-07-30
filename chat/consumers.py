@@ -3,47 +3,57 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from .models import Chat, ChatMessage
 from main.models import Profile
 from channels.db import database_sync_to_async
-from django.core.serializers.json import DjangoJSONEncoder
+from .permissions import has_chat_access
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
-        self.room_name = self.scope['url_route']['kwargs']['room_name']
-        self.room_group_name = f'chat_{self.room_name}'
+        try:
+            self.chat_name = self.scope['url_route']['kwargs']['chat_name']
+            self.chat_group_name = f'chat_{self.chat_name}'
 
-        await self.channel_layer.group_add(self.room_group_name, self.channel_name)
+            if not await has_chat_access(self.scope['user'], self.chat_name):
+                await self.close()
+            else:
+                await self.channel_layer.group_add(self.chat_group_name, self.channel_name)
 
-        await self.accept()
+                await self.accept()
+        except Exception:
+            await self.close()
 
     async def disconnect(self, close_code):
-        await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
+        await self.channel_layer.group_discard(self.chat_group_name, self.channel_name)
 
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
-        user = self.scope['user']
-
         message = text_data_json['message']
-
+        
         if len(message) >= 512 or len(message.replace(' ', '').replace('\n', '')) == 0: return
 
-        chat = await database_sync_to_async(Chat.objects.get)(id=self.room_name)
+        user = self.scope['user']
+        profile = await database_sync_to_async(Profile.objects.get)(user=user)
+
+        chat = await database_sync_to_async(Chat.objects.get)(id=self.chat_name)
 
         message = await database_sync_to_async(ChatMessage.objects.create)(chat=chat, sender=user, body=message)
 
-        await self.channel_layer.group_send(self.room_group_name, {
+        await self.channel_layer.group_send(self.chat_group_name, {
             'type': 'chat_message',
-            'user': user,
-            'message': message
+            'alias': profile.alias,
+            'message': message.body,
+            'avatar': profile.avatar.url,
+            'created': f'{message.created.hour:02d}:{message.created.minute:02d}'
         })
 
     async def chat_message(self, event):
         message = event['message']
-        user = event['user']
-        profile = await database_sync_to_async(Profile.objects.get)(user=user)
+        user = event['alias']
+        avatar = event['avatar']
+        created = event['created']
 
         await self.send(json.dumps({
-            'message': message.body,
-            'sender': user.username,
-            'avatar': profile.avatar.url,
-            'created': {'hour': f'{message.created.hour:02d}', 'minute': f'{message.created.minute:02d}'}
-        }, cls=DjangoJSONEncoder))
+            'message': message,
+            'sender': user,
+            'avatar': avatar,
+            'created': created
+        }))

@@ -11,7 +11,7 @@
     <div class="flex flex-col h-screen w-4/5">
         <div class="flex items-center text-lg top-0 w-full h-16 px-5 border-b border-zinc-700/30 bg-zinc-800/30">
             <img src="{% static 'images/avatar.png' %}" class="rounded-full h-8 w-8 mr-2">
-            <a href="#" class="hover:text-white text-xl">{{ opposite_user.username }}</a>
+            <a href="#" class="hover:text-white text-xl">{{ opposite_user.profile.alias }}</a>
         </div>
         <ul id="messages-container" class="flex flex-1 flex-col-reverse overflow-y-auto w-full text-left px-2">
             {% for message in chat.messages.all %}
@@ -21,7 +21,7 @@
                     </div>
                     <div class="w-full">
                         <div class="block">
-                            <span class="cursor-pointer hover:underline">{{ message.sender }}</span>
+                            <span class="cursor-pointer hover:underline">{{ message.sender.profile.alias }}</span>
                             <span class="text-sm text-zinc-500">{{ message.created|formatted_time }}</span>
                         </div>
                         <p class="block text-base break-all whitespace-pre-line">{{ message.body }}</p>
@@ -35,20 +35,19 @@
             </div>
         </div>
     </div>
-    <div class="flex flex-col max-h-screen grow h-screen text-center py-5 border border-zinc-700/30 bg-zinc-800/30">
+    <div class="flex flex-col max-h-screen w-1/5 h-screen text-center py-5 border border-zinc-700/30 bg-zinc-800/30">
         <div class="flex justify-center">
             <img src="{{ opposite_user.profile.avatar.url }}" class="rounded-full h-20 w-20 mr-2">
         </div>
-        <div class="flex justify-center">
-            <ul>
-                <li class="text-2xl">
-                    {{ opposite_user.username }}
+        <div class="flex justify-center rounded-xl mx-5 my-3 border border-zinc-700/60 bg-zinc-800/30" style="min-height: 22rem;">
+            <ul class="w-full">
+                <li class="py-3 px-2">
+                    <p class="text-2xl break-all">{{ opposite_user.profile.alias }}</p>
+                    <p class="text-xl break-all">{{ opposite_user.profile.alias }}#{{ opposite_user.pk }}</p>
                 </li>
-                <li class="text-xl">
-                    {{ opposite_user.username }}#{{ opposite_user.pk }}
-                </li>
-                <li>
-                    Description <!-- Placeholder for opposite users description -->
+                <li class="text-left w-full border-t-2 border-zinc-700/80 py-3 px-2">
+                    <span class="text-lg font-medium">About me</span>
+                    <p class="text-base break-all">{{ opposite_user.profile.description }}</p>
                 </li>
             </ul>
         </div>
@@ -56,5 +55,7 @@
 {% endblock %}
 
 {% block scripts %}
+    {{ id|json_script:"chat-name" }}
+    <script src="{% static 'js/chat/sockets.js' %}"></script>
     <script src="{% static 'js/chat/chat_room.js' %}"></script>
 {% endblock %}

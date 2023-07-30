@@ -1,6 +1,9 @@
 const chat = document.getElementById('messages-container');
 const messageInput = document.getElementById('message-input');
+const room = document.getElementById(`chat-${roomName}`);
 
+
+room.classList.replace('hover:bg-zinc-700/30', 'bg-zinc-900/40');
 
 messageInput.addEventListener('keydown', function(event) {
     if (event.key == 'Enter' && event.shiftKey == false) {
@@ -47,7 +50,7 @@ socket.onmessage = function(event) {
                              <div class="w-full">
                                  <div class="block">
                                      <span class="cursor-pointer hover:underline">${sender}</span>
-                                     <span class="text-sm text-zinc-500">Today ${created.hour}:${created.minute}</span>
+                                     <span class="text-sm text-zinc-500">Today at ${created}</span>
                              </div>
                                  <p class="block text-base break-all whitespace-pre-line">${message}</p>
                              </div>`;

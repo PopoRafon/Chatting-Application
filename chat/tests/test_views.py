@@ -36,8 +36,8 @@ class TestChatViews(TestCase):
         self.client.force_login(self.user)
         response = self.client.get(self.chat_room_url)
 
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'chat/chat_components/chat_room.html')
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, self.chat_home_url)
 
     def test_chat_room_view_GET_user_in_chat_users(self):
         self.chat.users.add(self.user)

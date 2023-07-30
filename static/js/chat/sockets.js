@@ -1,4 +1,4 @@
-const roomName = JSON.parse(document.getElementById('room-name').textContent);
+const roomName = JSON.parse(document.getElementById('chat-name').textContent);
 
 const socket = new WebSocket(
     'ws://'

@@ -12,17 +12,17 @@
                 <div>
                     <p class="flex justify-center mb-3">Private messages</p>
                     <ul>
-                        {% for chat in request.user.chats.all %}
+                        {% for chat in user_chats %}
                             <li class="flex justify-center">
-                                <a href="{% url 'chat-room' chat.pk %}" class="flex justify-left items-center w-full py-2 pl-3 pr-10 hover:bg-zinc-700/30">
-                                    <img src="{% static 'images/avatar.png' %}" class="rounded-full h-8 w-8 mr-2"> <!-- Placeholder for users avatar -->
-                                    <p class="truncate text-md">
-                                        {% for user in chat.users.all %}
-                                            {% if user != request.user %}
-                                                {{ user.username }}
-                                            {% endif %}
-                                        {% endfor %}
-                                    </p>
+                                <a id="chat-{{ chat.pk }}" href="{% url 'chat-room' chat.pk %}" class="flex justify-left items-center w-full py-2 pl-3 pr-10 hover:bg-zinc-700/30">
+                                    {% for user in chat.users.all %}
+                                        {% if user != request.user %}
+                                            <img src="{{ user.profile.avatar.url }}" class="rounded-full h-8 w-8 mr-2">
+                                            <p class="truncate text-md">
+                                                {{ user.profile.alias }}
+                                            </p>
+                                        {% endif %}
+                                    {% endfor %}
                                 </a>
                             </li>
                         {% endfor %}
