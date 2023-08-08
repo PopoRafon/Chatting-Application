@@ -1,10 +1,9 @@
 {% extends 'chat/chat_components/chat_base.html' %}
 
 {% load static %}
-{% load time_filters %}
 
 {% block title %}
-    Discord | {{ id }}
+    Discord | {{ opposite_user.profile.alias }}
 {% endblock %}
 
 {% block main %}
@@ -14,20 +13,7 @@
             <a href="#" class="hover:text-white text-xl">{{ opposite_user.profile.alias }}</a>
         </div>
         <ul id="messages-container" class="flex flex-1 flex-col-reverse overflow-y-auto w-full text-left px-2">
-            {% for message in chat.messages.all %}
-                <li class="flex rounded-xl hover:bg-zinc-800/30 px-2 mt-3">
-                    <div class="top-0 left-0 h-full w-14 mr-3">
-                        <img src="{{ message.sender.profile.avatar.url }}" class="rounded-full h-12 w-12">
-                    </div>
-                    <div class="w-full">
-                        <div class="block">
-                            <span class="cursor-pointer hover:underline">{{ message.sender.profile.alias }}</span>
-                            <span class="text-sm text-zinc-500">{{ message.created|formatted_time }}</span>
-                        </div>
-                        <p class="block text-base break-all whitespace-pre-line">{{ message.body }}</p>
-                    </div>
-                </li>
-            {% endfor %}
+            {% include 'chat/chat_components/chat_messages.html' %}
         </ul>
         <div class="max-h-screen flex justify-center mt-auto bottom-0 py-7 w-full">
             <div class="flex justify-center w-2/3">

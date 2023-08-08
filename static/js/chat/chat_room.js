@@ -1,9 +1,10 @@
 const chat = document.getElementById('messages-container');
 const messageInput = document.getElementById('message-input');
 const room = document.getElementById(`chat-${roomName}`);
+let isSendingMessage = false;
 
 
-room.classList.replace('hover:bg-zinc-700/30', 'bg-zinc-900/40');
+document.onload = room.classList.replace('hover:bg-zinc-700/30', 'bg-zinc-900/40');
 
 messageInput.addEventListener('keydown', function(event) {
     if (event.key == 'Enter' && event.shiftKey == false) {
@@ -33,6 +34,38 @@ messageInput.addEventListener('input', function() {
     this.style.height = `${this.scrollHeight}px`;
 });
 
+chat.addEventListener('scroll', function() {
+    if (!isSendingMessage && -(this.scrollTop) + this.clientHeight >= this.scrollHeight-100) {
+        var messagesLength = chat.children.length;
+        var url = `${window.location.origin}/channels/chat/load/messages?chat=${roomName}&length=${messagesLength}`;
+        var chatScrollTop = chat.scrollTop;
+
+        isSendingMessage = true;
+
+        fetch(url, {
+            method: 'GET'
+        })
+        .then(response => {
+            return response.json();
+        })
+        .then(data => {
+            if (data.error) {
+                console.log(data.error);
+            } else {
+                chat.innerHTML += data.messages;
+                
+                setTimeout(() => {
+                    chat.scrollTop = chatScrollTop;
+                }, 50)
+            };
+
+            setTimeout(() => {
+                isSendingMessage = false;
+            }, 500);
+        });
+    };
+});
+
 socket.onmessage = function(event) {
     var data = JSON.parse(event.data);
     var message = data['message'];
@@ -42,7 +75,7 @@ socket.onmessage = function(event) {
 
     var newMessage = document.createElement('li');
 
-    newMessage.classList.add('flex', 'rounded-xl', 'hover:bg-zinc-800/30', 'px-2', 'mt-3');
+    newMessage.classList.add('flex', 'rounded-xl', 'hover:bg-zinc-800/30', 'px-2', 'mt-4');
 
     newMessage.innerHTML += `<div class="top-0 left-0 h-full w-14 mr-3">
                                  <img src="${avatar}" class="rounded-full h-12 w-12">

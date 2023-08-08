@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from datetime import timedelta
 
 
 class Chat(models.Model):
@@ -12,6 +13,10 @@ class ChatMessage(models.Model):
     body = models.TextField(max_length=512)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
+
+    def was_modified(self):
+        threshold = timedelta(milliseconds=500)
+        return abs(self.modified - self.created) > threshold
 
     class Meta:
         ordering = ['-created']
@@ -27,6 +32,10 @@ class ChannelMessage(models.Model):
     body = models.TextField(max_length=512)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
+
+    def was_modified(self):
+        threshold = timedelta(milliseconds=500)
+        return abs(self.modified - self.created) > threshold
 
     class Meta:
         ordering = ['-created']
