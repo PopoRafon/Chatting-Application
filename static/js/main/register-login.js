@@ -5,12 +5,12 @@ form.addEventListener('submit', function(event) {
     event.preventDefault();
 
     sendFormData();
-});
+})
 
 function sendFormData() {
-    var url = window.location.href;
-    var csrftoken = getCookie('csrftoken');
-    var data = new FormData(form);
+    const url = window.location.href;
+    const csrftoken = getCookie('csrftoken');
+    const data = new FormData(form);
 
     fetch(url, {
         method: 'POST',
@@ -27,11 +27,11 @@ function sendFormData() {
         }
     })
     .then(data => {
-        var errors = data.errors;
-        var inputFields = form.querySelectorAll('.invalid-form-input');
+        const errors = data.errors;
+        const inputFields = form.querySelectorAll('.invalid-form-input');
 
         inputFields.forEach(input => {
-            var paragraph = document.getElementById(`invalid-${input.name}`);
+            const paragraph = document.getElementById(`invalid-${input.name}`);
 
             input.classList.replace('invalid-form-input', 'standard-form-input');
 
@@ -40,8 +40,8 @@ function sendFormData() {
         })
 
         for (let key in errors) {
-            var element = document.getElementsByName(key)[0];
-            var paragraph = document.getElementById(`invalid-${key}`);
+            const element = document.getElementsByName(key)[0];
+            const paragraph = document.getElementById(`invalid-${key}`);
 
             element.classList.replace('standard-form-input', 'invalid-form-input');
 
@@ -51,8 +51,8 @@ function sendFormData() {
     })
     .catch(error => {
         console.log(error);
-    });
-};
+    })
+}
 
 function getCookie(name) {
     const value = `; ${document.cookie}`;

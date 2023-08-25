@@ -40,19 +40,19 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await self.channel_layer.group_send(self.chat_group_name, {
             'type': 'chat_message',
             'alias': profile.alias,
-            'message': message.body,
+            'body': message.body,
             'avatar': profile.avatar.url,
-            'created': f'{message.created.hour:02d}:{message.created.minute:02d}'
+            'created': f'{message.created.strftime("%Y-%m-%d %H:%M")}'
         })
 
     async def chat_message(self, event):
-        message = event['message']
+        body = event['body']
         user = event['alias']
         avatar = event['avatar']
         created = event['created']
 
         await self.send(json.dumps({
-            'message': message,
+            'body': body,
             'sender': user,
             'avatar': avatar,
             'created': created

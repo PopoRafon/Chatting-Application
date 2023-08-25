@@ -3,7 +3,7 @@
 {% load static %}
 
 {% block content %}
-    <main class="flex w-full">
+    <main class="flex w-full overflow-y-auto invisible-scrollbar">
         <div class="flex flex-col overflow-y-auto invisible-scrollbar items-center top-0 left-0 w-80 h-screen transition-transform -translate-x-full sm:translate-x-0 border-r border-zinc-700/30 bg-zinc-800/20">
             <div class="w-full">
                 <div class="flex justify-center my-3">
@@ -30,10 +30,8 @@
                 </div>
             </div>
         </div>
-        <div class="flex h-screen w-full">
-            {% block main %}
+        {% block main %}
 
-            {% endblock %}
-        </div>
+        {% endblock %}
     </main>
 {% endblock %}

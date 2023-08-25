@@ -6,14 +6,14 @@
         <div class="top-0 left-0 h-full w-14 mr-3 mt-1">
             <img src="{{ message.sender.profile.avatar.url }}" class="rounded-full h-12 w-12">
         </div>
-        <div class="w-full">
+        <div class="w-full overflow-y-auto invisible-scrollbar">
             <div class="block">
                 <span class="cursor-pointer hover:underline">{{ message.sender.profile.alias }}</span>
                 <span class="text-sm text-zinc-500">{{ message.created|formatted_time }}</span>
             </div>
-            <div class="inline-flex">
+            <div>
                 <div>
-                    <p class="block text-base break-all whitespace-pre-line">{{ message.body }}</p>
+                    <p class="text-base block whitespace-pre-line break-words">{{ message.body }}</p>
                 </div>
                 <div class="ml-3 text-sm w-1/6">
                     {% if message.was_modified %}
