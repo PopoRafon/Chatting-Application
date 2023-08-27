@@ -15,6 +15,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
             if not await has_chat_access(self.scope['user'], self.chat_name):
                 await self.close()
             else:
+                self.chat_instance = await database_sync_to_async(Chat.objects.get)(id=self.chat_name)
+
                 await self.channel_layer.group_add(self.chat_group_name, self.channel_name)
 
                 await self.accept()
@@ -26,34 +28,75 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
-        message = text_data_json['message']
-        
-        if len(message) >= 512 or len(message.replace(' ', '').replace('\n', '')) == 0: return
-
+        action_type = text_data_json['type']
         user = self.scope['user']
-        profile = await database_sync_to_async(Profile.objects.get)(user=user)
 
-        chat = await database_sync_to_async(Chat.objects.get)(id=self.chat_name)
+        if action_type == 'send_message':
+            await self.create_message(user, text_data_json['message'])
+        elif action_type == 'delete_message':
+            await self.delete_message(user, text_data_json['message_id'])
+        else:
+            await self.channel_layer.group_send(self.chat_group_name, {
+                'type': 'send_error'
+            })
 
-        message = await database_sync_to_async(ChatMessage.objects.create)(chat=chat, sender=user, body=message)
+    async def send_error(self, event):
+        await self.send(json.dumps({
+            'error': 'Provided action type is not supported.'
+        }))
 
-        await self.channel_layer.group_send(self.chat_group_name, {
-            'type': 'chat_message',
-            'alias': profile.alias,
-            'body': message.body,
-            'avatar': profile.avatar.url,
-            'created': f'{message.created.strftime("%Y-%m-%d %H:%M")}'
-        })
-
-    async def chat_message(self, event):
+    async def send_created_message(self, event):
+        id = event['id']
+        sender = event['sender']
         body = event['body']
-        user = event['alias']
         avatar = event['avatar']
         created = event['created']
 
         await self.send(json.dumps({
+            'message_created': 'Message was successfuly created.',
+            'id': id,
+            'sender': sender,
             'body': body,
-            'sender': user,
             'avatar': avatar,
             'created': created
         }))
+
+    async def send_deleted_message(self, event):
+        id = event['id']
+
+        await self.send(json.dumps({
+            'message_deleted': 'Message was successfuly deleted.',
+            'id': id
+        }))
+
+    async def create_message(self, user, received_message):
+        try:
+            if len(received_message) >= 512 or len(received_message.replace(' ', '').replace('\n', '')) == 0: return
+
+            profile = await database_sync_to_async(Profile.objects.get)(user=user)
+
+            message = await database_sync_to_async(ChatMessage.objects.create)(chat=self.chat_instance, sender=user, body=received_message)
+
+            await self.channel_layer.group_send(self.chat_group_name, {
+                'type': 'send_created_message',
+                'id': message.id,
+                'sender': profile.alias,
+                'body': message.body,
+                'avatar': profile.avatar.url,
+                'created': message.created.strftime("%Y-%m-%d %H:%M")
+            })
+        except Exception:
+            return
+
+    async def delete_message(self, user, message_id):
+        try:
+            message = await database_sync_to_async(ChatMessage.objects.get)(id=message_id, sender=user)
+
+            await message.adelete()
+
+            await self.channel_layer.group_send(self.chat_group_name, {
+                'type': 'send_deleted_message',
+                'id': message_id
+            })
+        except Exception:
+            return

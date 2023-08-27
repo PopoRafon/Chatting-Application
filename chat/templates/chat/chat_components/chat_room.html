@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block main %}
-    <div class="flex flex-col h-screen w-4/5 overflow-y-auto invisible-scrollbar">
+    <div class="flex flex-col h-screen w-4/6 overflow-y-auto invisible-scrollbar">
         <div class="flex items-center text-lg top-0 w-full h-16 px-5 border-b border-zinc-700/30 bg-zinc-800/30">
             <img src="{% static 'images/avatar.png' %}" class="rounded-full h-8 w-8 mr-2">
             <a href="#" class="hover:text-white text-xl">{{ opposite_user.profile.alias }}</a>
@@ -21,7 +21,7 @@
             </div>
         </div>
     </div>
-    <div class="flex flex-col w-1/5 overflow-y-auto invisible-scrollbar h-screen text-center py-5 border border-zinc-700/30 bg-zinc-800/30">
+    <div class="flex-grow flex-col overflow-y-auto invisible-scrollbar h-screen text-center py-5 border border-zinc-700/30 bg-zinc-800/30">
         <div class="flex justify-center">
             <img src="{{ opposite_user.profile.avatar.url }}" class="rounded-full h-20 w-20 mr-2">
         </div>
@@ -41,6 +41,7 @@
 {% endblock %}
 
 {% block scripts %}
+    {{ request.user.profile.alias|json_script:"user" }}
     {{ id|json_script:"chat-name" }}
     <script src="{% static 'js/chat/sockets.js' %}"></script>
     <script src="{% static 'js/chat/chat_room_visuals.js' %}"></script>

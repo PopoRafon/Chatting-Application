@@ -19,7 +19,7 @@ class ChatMessageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ChatMessage
-        fields = ['sender', 'avatar', 'body', 'created', 'modified']
+        fields = ['id', 'sender', 'avatar', 'body', 'created', 'modified']
 
     def get_created(self, obj):
         return obj.created.strftime("%Y-%m-%d %H:%M")

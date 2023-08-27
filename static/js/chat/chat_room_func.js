@@ -1,4 +1,5 @@
 const chat = document.getElementById('messages-container');
+const deleteButton = document.getElementById('delete-message-button');
 let blockNewRequests = false;
 
 
@@ -41,8 +42,26 @@ chat.addEventListener('scroll', async function() {
     }
 })
 
+deleteButton.addEventListener('click', () => {
+    const message_id = deleteButton.getAttribute('data-message-id');
+
+    socket.send(JSON.stringify({
+        'type': 'delete_message',
+        'message_id': message_id
+    })); 
+
+    unToggleDeletionModal();
+})
+
 socket.onmessage = function(event) {
     const data = JSON.parse(event.data);
 
-    addMessageToChat([data], false);
+    if (data.error) {
+        console.log(data.error);
+        return;
+    } else if (data.message_deleted) {
+        deleteMessageFromChat(data);
+    } else if (data.message_created) {
+        addMessageToChat([data], false);
+    }
 };
