@@ -53,6 +53,14 @@ deleteButton.addEventListener('click', () => {
     unToggleDeletionModal();
 })
 
+function modifyMessageRequest(id, body) {
+    socket.send(JSON.stringify({
+        'type': 'modify_message',
+        'message_id': id,
+        'body': body
+    }))
+}
+
 socket.onmessage = function(event) {
     const data = JSON.parse(event.data);
 
@@ -63,5 +71,7 @@ socket.onmessage = function(event) {
         deleteMessageFromChat(data);
     } else if (data.message_created) {
         addMessageToChat([data], false);
+    } else if (data.message_modified) {
+        modifyMessageFromChat(data);
     }
 };

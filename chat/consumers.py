@@ -35,6 +35,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
             await self.create_message(user, text_data_json['message'])
         elif action_type == 'delete_message':
             await self.delete_message(user, text_data_json['message_id'])
+        elif action_type == 'modify_message':
+            await self.modify_message(user, text_data_json['message_id'], text_data_json['body'])
         else:
             await self.channel_layer.group_send(self.chat_group_name, {
                 'type': 'send_error'
@@ -69,9 +71,21 @@ class ChatConsumer(AsyncWebsocketConsumer):
             'id': id
         }))
 
+    async def send_modified_message(self, event):
+        id = event['id']
+        time = event['time']
+        body = event['body']
+
+        await self.send(json.dumps({
+            'message_modified': 'Message was successfuly modified.',
+            'id': id,
+            'time': time,
+            'body': body
+        }))
+
     async def create_message(self, user, received_message):
         try:
-            if len(received_message) >= 512 or len(received_message.replace(' ', '').replace('\n', '')) == 0: return
+            if len(received_message) >= 511 or len(received_message.replace(' ', '').replace('\n', '')) == 0: return
 
             profile = await database_sync_to_async(Profile.objects.get)(user=user)
 
@@ -97,6 +111,25 @@ class ChatConsumer(AsyncWebsocketConsumer):
             await self.channel_layer.group_send(self.chat_group_name, {
                 'type': 'send_deleted_message',
                 'id': message_id
+            })
+        except Exception:
+            return
+        
+    async def modify_message(self, user, message_id, body):
+        try:
+            if len(body) >= 511 or len(body.replace(' ', '').replace('\n', '')) == 0: return
+
+            message = await database_sync_to_async(ChatMessage.objects.get)(id=message_id, sender=user)
+
+            message.body = body
+
+            await message.asave()
+
+            await self.channel_layer.group_send(self.chat_group_name, {
+                'type': 'send_modified_message',
+                'id': message_id,
+                'time': message.modified.strftime("%H:%M"),
+                'body': body
             })
         except Exception:
             return
