@@ -21,15 +21,15 @@
             </div>
         </div>
     </div>
-    <div class="flex-grow flex-col overflow-y-auto invisible-scrollbar h-screen text-center py-5 border border-zinc-700/30 bg-zinc-800/30">
+    <div class="flex-col w-[400px] overflow-y-auto invisible-scrollbar h-screen text-center py-5 border border-zinc-700/30 bg-zinc-800/30">
         <div class="flex justify-center">
             <img src="{{ opposite_user.profile.avatar.url }}" class="rounded-full h-20 w-20 mr-2">
         </div>
         <div class="flex justify-center rounded-xl mx-5 my-3 border border-zinc-700/60 bg-zinc-800/30" style="min-height: 22rem;">
             <ul class="w-full">
                 <li class="py-3 px-2">
-                    <p class="text-2xl break-all">{{ opposite_user.profile.alias }}</p>
-                    <p class="text-xl break-all">{{ opposite_user.profile.alias }}#{{ opposite_user.pk }}</p>
+                    <p class="text-2xl break-words">{{ opposite_user.profile.alias }}</p>
+                    <p class="text-xl break-words">{{ opposite_user.profile.alias }}#{{ opposite_user.pk }}</p>
                 </li>
                 <li class="text-left w-full border-t-2 border-zinc-700/80 py-3 px-2">
                     <span class="text-lg font-medium">About me</span>
@@ -43,7 +43,9 @@
 {% block scripts %}
     {{ request.user.profile.alias|json_script:"user" }}
     {{ id|json_script:"chat-name" }}
+    <script src="{% static 'js/main.js' %}"></script>
     <script src="{% static 'js/chat/sockets.js' %}"></script>
     <script src="{% static 'js/chat/chat_room_visuals.js' %}"></script>
     <script src="{% static 'js/chat/chat_room_func.js' %}"></script>
+    <script src="{% static 'js/chat/modal.js' %}"></script>
 {% endblock %}

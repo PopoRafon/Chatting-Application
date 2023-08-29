@@ -1,16 +1,10 @@
 const room = document.getElementById(`chat-${roomName}`);
 const messageInput = document.getElementById('message-input');
-const modalButtons = document.querySelectorAll('.modal-button');
-const deletionModal = document.getElementById('deletion-modal');
-const cancelButton = document.getElementById('cancel-button');
-const exitButton = document.getElementById('exit-button');
 const editButtons = document.querySelectorAll('.edit-button');
 const user = JSON.parse(document.getElementById('user').textContent);
 
 
 room.classList.replace('hover:bg-zinc-700/30', 'bg-zinc-900/40');
-
-addModalButtonsListeners(modalButtons);
 
 addEditButtonsListeners(editButtons);
 
@@ -125,26 +119,6 @@ function deleteMessageFromChat(data) {
     message.remove();
 }
 
-window.addEventListener('click', (event) => {
-    if (event.target === deletionModal) unToggleDeletionModal();
-})
-
-cancelButton.addEventListener('click', unToggleDeletionModal)
-
-exitButton.addEventListener('click', unToggleDeletionModal)
-
-function unToggleDeletionModal() {
-    deletionModal.classList.add('hidden');
-    deletionModal.classList.remove('flex');
-}
-
-function toggleDeletionModal(id) {
-    deletionModal.classList.add('flex');
-    deletionModal.classList.remove('hidden');
-
-    deleteButton.setAttribute('data-message-id', id);
-}
-
 function modifyMessageFromChat(data) {
     const id = data.id;
     const time = data.time;
@@ -161,16 +135,6 @@ function modifyMessageFromChat(data) {
             Today at ${time}
         </span>
     </span>`
-}
- 
-function addModalButtonsListeners(buttons) {
-    buttons.forEach((button) => {
-        button.addEventListener('click', () => {
-            const messageId = button.getAttribute('data-message-id');
-    
-            toggleDeletionModal(messageId);       
-        })
-    })
 }
 
 function addEditButtonsListeners(buttons) {
@@ -206,8 +170,13 @@ function addEditButtonsListeners(buttons) {
     
                         message.contentEditable = false;
                         message.classList.remove('bg-zinc-700/40');
-    
+
                         modifyMessageRequest(messageId, message.textContent);
+                    } else if (event.key === 'Escape') {
+                        message.contentEditable = false;
+                        message.classList.remove('bg-zinc-700/40');
+            
+                        message.textContent = initialTextContent;        
                     }
                 })
             } else {

@@ -13,8 +13,8 @@
                     <p class="flex justify-center mb-3">Private messages</p>
                     <ul>
                         {% for chat in user_chats %}
-                            <li class="flex justify-center">
-                                <a id="chat-{{ chat.pk }}" href="{% url 'chat-room' chat.pk %}" class="flex justify-left items-center w-full py-2 pl-3 pr-10 hover:bg-zinc-700/30">
+                            <li id="chat-{{ chat.id }}" class="flex justify-center group/chat hover:bg-zinc-700/30">
+                                <a href="{% url 'chat-room' chat.id %}" class="flex justify-left items-center w-full py-2 pl-3 pr-8">
                                     {% for user in chat.users.all %}
                                         {% if user != request.user %}
                                             <img src="{{ user.profile.avatar.url }}" class="rounded-full h-8 w-8 mr-2">
@@ -24,6 +24,9 @@
                                         {% endif %}
                                     {% endfor %}
                                 </a>
+                                <button class="modal-button hidden absolute group-hover/chat:flex right-0 mr-2 self-center rounded-md" data-chat-id="{{ chat.id }}">
+                                    <img src="{% static 'images/buttons/delete_message_button.png' %}" class="w-4 h-4">
+                                </button>
                             </li>
                         {% endfor %}
                     </ul>

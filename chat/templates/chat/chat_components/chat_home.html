@@ -1,9 +1,16 @@
 {% extends 'chat/chat_components/chat_base.html' %}
 
+{% load static %}
+
 {% block title %}
     Discord
 {% endblock %}
 
 {% block main %}
 
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/chat/modal.js' %}"></script>
 {% endblock %}

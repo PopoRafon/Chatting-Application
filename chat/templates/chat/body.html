@@ -4,6 +4,8 @@
 
 {% block body %}
     <body class="flex bg-zinc-900/90 text-white/90 text-lg">
+        {% csrf_token %}
+
         {% include 'chat/navbar.html' %}
 
         {% include 'chat/chat_components/deletion_modal.html' %}

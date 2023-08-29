@@ -11,7 +11,7 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['username', 'alias', 'avatar', 'description']
 
 
-class ChatMessageSerializer(serializers.ModelSerializer):
+class GetChatMessageSerializer(serializers.ModelSerializer):
     sender = serializers.CharField(source='sender.profile.alias', read_only=True)
     avatar = serializers.ImageField(source='sender.profile.avatar', read_only=True)
     created = serializers.SerializerMethodField()
