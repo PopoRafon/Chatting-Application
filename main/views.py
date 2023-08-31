@@ -1,5 +1,5 @@
 from django.views.generic import TemplateView, CreateView
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.models import User
 from .forms import RegistrationForm, LoginForm
 from django.urls import reverse_lazy
@@ -51,3 +51,7 @@ class LoginView(LoginView):
             form.errors['username'] = ["Credentials you provide are invalid."]
             form.errors['password'] = ["Credentials you provide are invalid."]
         return JsonResponse({'errors': form.errors}, status=422)
+
+
+class LogoutView(LogoutView):
+    next_page = reverse_lazy('home')

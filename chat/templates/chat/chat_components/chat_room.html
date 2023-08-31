@@ -1,4 +1,4 @@
-{% extends 'chat/chat_components/chat_base.html' %}
+{% extends 'chat/chat_components/base.html' %}
 
 {% load static %}
 
@@ -7,32 +7,19 @@
 {% endblock %}
 
 {% block main %}
-    <div class="flex flex-col h-screen w-4/6 overflow-y-auto invisible-scrollbar">
-        <div class="flex items-center text-lg top-0 w-full h-16 px-5 border-b border-zinc-700/30 bg-zinc-800/30">
-            <img src="{% static 'images/avatar.png' %}" class="rounded-full h-8 w-8 mr-2">
-            <a href="#" class="hover:text-white text-xl">{{ opposite_user.profile.alias }}</a>
-        </div>
-        <ul id="messages-container" class="flex flex-1 flex-col-reverse overflow-y-auto overflow-x-hidden w-full text-left px-2">
-            {% include 'chat/chat_components/chat_messages.html' %}
-        </ul>
-        <div class="max-h-screen flex justify-center mt-auto bottom-0 py-7 w-full">
-            <div class="flex justify-center w-2/3">
-                <textarea id="message-input" placeholder="Send message to {{ opposite_user.username }}" class="rounded-xl p-3 bg-zinc-700 w-full resize-none invisible-scrollbar" rows="1"></textarea>
-            </div>
-        </div>
-    </div>
-    <div class="flex-col w-[400px] overflow-y-auto invisible-scrollbar h-screen text-center py-5 border border-zinc-700/30 bg-zinc-800/30">
+    {% include 'chat/chat_components/messages_container.html' %}
+    <div class="hidden lg:flex flex-col w-[350px] overflow-y-auto invisible-scrollbar h-screen text-center py-5 border border-zinc-700/30 bg-zinc-800/30">
         <div class="flex justify-center">
             <img src="{{ opposite_user.profile.avatar.url }}" class="rounded-full h-20 w-20 mr-2">
         </div>
         <div class="flex justify-center rounded-xl mx-5 my-3 border border-zinc-700/60 bg-zinc-800/30" style="min-height: 22rem;">
             <ul class="w-full">
                 <li class="py-3 px-2">
-                    <p class="text-2xl break-words">{{ opposite_user.profile.alias }}</p>
-                    <p class="text-xl break-words">{{ opposite_user.profile.alias }}#{{ opposite_user.pk }}</p>
+                    <p class="text-lg break-words">{{ opposite_user.profile.alias }}</p>
+                    <p class="text-base break-words">{{ opposite_user.profile.alias }}#{{ opposite_user.pk }}</p>
                 </li>
-                <li class="text-left w-full border-t-2 border-zinc-700/80 py-3 px-2">
-                    <span class="text-lg font-medium">About me</span>
+                <li class="text-center w-full border-t-2 border-zinc-700/80 py-3 px-2">
+                    <span class="text-base font-medium">About me</span>
                     <p class="text-base break-all">{{ opposite_user.profile.description }}</p>
                 </li>
             </ul>

@@ -43,12 +43,12 @@ function addMessageToChat(data, oldMessage) {
     const today = `${date.getFullYear()}-${("0" + (date.getMonth() + 1)).slice(-2)}-${date.getDate()}`;
     const yesterday = `${date.getFullYear()}-${("0" + (date.getMonth() + 1)).slice(-2)}-${date.getDate()-1}`;
 
-    for (let message in data) {
-        const id = data[message].id;
-        const body = data[message].body;
-        const sender = data[message].sender;
-        const avatar = data[message].avatar;
-        const created = data[message].created.split(" ");
+    for (const message of data) {
+        const id = message.id;
+        const body = message.body;
+        const sender = message.sender;
+        const avatar = message.avatar;
+        const created = message.created.split(" ");
         let wasCreated;
 
         if (today === created[0]) {
@@ -66,19 +66,19 @@ function addMessageToChat(data, oldMessage) {
         newMessage.classList.add('flex', 'relative', 'group/toolbar', 'rounded-xl', 'hover:bg-zinc-800/30', 'px-2', 'mt-4');
 
         newMessage.innerHTML += `
-        <div class="top-0 left-0 h-full w-14 mr-2 mt-1">
-            <img src="${avatar}" class="rounded-full h-12 w-12">
+        <div class="top-0 left-0 h-full w-12 mr-1 mt-1">
+            <img src="${avatar}" class="rounded-full h-11 w-11">
         </div>
         <div class="w-full overflow-y-auto invisible-scrollbar">
             <div class="block px-1">
-                <span class="cursor-pointer hover:underline">${sender}</span>
-                <span class="text-sm text-zinc-500">${wasCreated} ${created[1]}</span>
+                <span class="text-sm lg:text-[15px] font-semibold cursor-pointer hover:underline">${sender}</span>
+                <span class="text-[11px] lg:text-xs text-zinc-500">${wasCreated} ${created[1]}</span>
             </div>
             <div>
                 <div>
-                    <p id="message-${id}-body" class="text-base block whitespace-pre-line break-words px-1 rounded-lg focus:outline-none" contenteditable="false">${body}</p>
+                    <p id="message-${id}-body" class="text-sm lg:text-[15px] block whitespace-pre-line break-words px-1 rounded-lg focus:outline-none" contenteditable="false">${body}</p>
                 </div>
-                <div id="message-${id}-modified" class="text-sm w-1/6">
+                <div id="message-${id}-modified" class="text-xs w-1/6 px-1">
                 </div>
             </div>
         </div>`;
@@ -87,17 +87,16 @@ function addMessageToChat(data, oldMessage) {
             newMessage.innerHTML += `
             <div class="hidden absolute group-hover/toolbar:inline-flex top-0 right-0 mr-2 rounded-md transform -translate-y-1/2 text-center bg-zinc-700 border border-zinc-800">
                 <button class="flex justify-center items-center p-1 rounded-tl-md rounded-bl-md hover:bg-zinc-600">
-                    <img src="/static/images/buttons/add_emote_button.png" class="w-6 h-6">
+                    <img src="/static/images/buttons/add_emote_button.png" class="w-5 h-5">
                 </button>
                 <button class="edit-button flex justify-center items-center p-1 hover:bg-zinc-600" data-message-id="${id}">
-                    <img src="/static/images/buttons/edit_message_button.png" class="w-6 h-6">
+                    <img src="/static/images/buttons/edit_message_button.png" class="w-5 h-5">
                 </button>
                 <button class="modal-button flex justify-center items-center p-1 rounded-tr-md rounded-br-md hover:bg-zinc-600" data-message-id="${id}">
-                    <img src="/static/images/buttons/delete_message_button.png" class="w-6 h-6">
+                    <img src="/static/images/buttons/delete_message_button.png" class="w-5 h-5">
                 </button>
             </div>`;
         }
-
 
         fragment.appendChild(newMessage);
     }
@@ -131,7 +130,7 @@ function modifyMessageFromChat(data) {
     modified.innerHTML = `
     <span class="group/modified text-zinc-500">
         (modified)
-        <span class="hidden absolute rounded-md group-hover/modified:block transform -translate-y-12 -translate-x-4 bg-zinc-700 text-white py-1 px-2">
+        <span class="hidden absolute rounded-md group-hover/modified:block transform -translate-y-10 -translate-x-4 bg-zinc-700 text-white py-1 px-2">
             Today at ${time}
         </span>
     </span>`

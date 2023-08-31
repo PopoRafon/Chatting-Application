@@ -1,0 +1,40 @@
+{% load static %}
+
+<div id="private-messages-sidebar" class="left-16 bottom-0 z-40 absolute lg:static lg:-translate-x-0 text-base flex flex-col overflow-y-auto invisible-scrollbar items-center lg:top-0 lg:left-0 w-64 h-[calc(100vh-3rem)] lg:h-screen transition-transform border-r border-zinc-700/30 -translate-x-[calc(4rem+16rem)]" style="background-color: #2d2d2f">
+    <div class="w-full">
+        <div class="space-y-3 text-center justify-center py-3 sticky top-0 border-b border-zinc-700/30" style="background-color: #2d2d2f">
+            <input type="text" placeholder="Search for conversation" class="rounded-full py-1 px-3 placeholder:text-center focus:placeholder:text-transparent focus:outline-none bg-zinc-700/70">
+            <p class="flex justify-center mb-3">Private messages</p>
+        </div>
+        <div>
+            <ul class="flex flex-1 flex-col overflow-y-auto overflow-x-hidden invisible-scrollbar -translate-x-0 h-[calc(100vh-93px-49px-3rem)] lg:h-[calc(100vh-93px-49px)]">
+                {% for chat in user_chats %}
+                    <li id="chat-{{ chat.id }}" class="flex justify-center group/chat hover:bg-zinc-700/30">
+                        <a href="{% url 'chat-room' chat.id %}" class="flex justify-left items-center w-full py-2 pl-3 pr-8">
+                            {% for user in chat.users.all %}
+                                {% if user != request.user %}
+                                    <img src="{{ user.profile.avatar.url }}" class="rounded-full h-8 w-8 mr-2">
+                                    <p class="truncate text-md">
+                                        {{ user.profile.alias }}
+                                    </p>
+                                {% endif %}
+                            {% endfor %}
+                        </a>
+                        <button class="modal-button hidden absolute group-hover/chat:flex right-0 mr-2 self-center rounded-md" data-chat-id="{{ chat.id }}">
+                            <img src="{% static 'images/buttons/delete_message_button.png' %}" class="w-4 h-4">
+                        </button>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="bottom-0 border-t border-zinc-700/30 h-[calc(48px)]">
+            <a href="#" class="flex justify-left w-full h-full space-x-2 pl-2 pr-8 hover:bg-zinc-700/20">
+                <img src="{{ request.user.profile.avatar.url }}" class="rounded-full h-8 w-8 my-auto">
+                <span class="my-auto truncate">{{ request.user.profile.alias }}</span>
+            </a>
+            <a href="{% url 'logout' %}" class="absolute bottom-[calc(14px)] right-2">
+                <img src="{% static 'images/buttons/logout_button.png' %}" class="h-5 w-5">
+            </a>
+        </div>
+    </div>
+</div>

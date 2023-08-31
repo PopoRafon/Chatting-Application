@@ -1,23 +1,23 @@
 {% load static %}
 
-<nav class="flex flex-col overflow-y-auto invisible-scrollbar items-center top-0 left-0 w-20 h-screen transition-transform -translate-x-full sm:translate-x-0 bg-zinc-800/90 border-r border-zinc-700/30">
+<nav id="channels-navbar" class="absolute z-40 bottom-0 lg:static lg:-translate-x-0 lg:flex flex-col overflow-y-auto invisible-scrollbar items-center lg:top-0 left-0 w-16 h-[calc(100vh-3rem)] lg:h-screen transition-transform -translate-x-[calc(4rem+16rem+4rem)]" style="background-color: #28282b;">
     <ul>
         <li class="flex justify-center my-3">
             <a href="{% url 'chat-home' %}" class="rounded-full">
-                <img src="{% static 'images/buttons/user_chats.png' %}" class="w-12 h-12 rounded-full">
+                <img src="{% static 'images/buttons/user_chats.png' %}" class="w-11 h-11 rounded-full">
             </a>
         </li>
-        <hr class="border-zinc-600/60">
+        <hr class="border-zinc-600/60 w-9 mx-auto">
         {% for channel in request.user.channels.all %} <!-- Placeholder for user channels -->
             <li class="flex justify-center my-3">
                 <a href="#" class="rounded-full">
-                    <img src="{% static 'images/buttons/default_channel_icon.png' %}" class="w-12 h-12 rounded-full">
+                    <img src="{% static 'images/buttons/default_channel_icon.png' %}" class="w-11 h-11 rounded-full">
                 </a>
             </li>
         {% endfor %}
         <li class="flex justify-center my-3">
             <a href="#" class="rounded-full">
-                <img src="{% static 'images/buttons/add_new_channel.png' %}" class="w-12 h-12 rounded-full">
+                <img src="{% static 'images/buttons/add_new_channel.png' %}" class="w-11 h-11 rounded-full">
             </a>
         </li>
     </ul>

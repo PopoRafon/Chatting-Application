@@ -5,7 +5,7 @@ from django.shortcuts import redirect
 
 
 class ChatHomeView(LoginRequiredMixin, TemplateView):
-    template_name = 'chat/chat_components/chat_home.html'
+    template_name = 'chat/chat_components/home.html'
     redirect_field_name = None
 
     def get_context_data(self, **kwargs):
