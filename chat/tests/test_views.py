@@ -24,7 +24,7 @@ class TestChatViews(TestCase):
         response = self.client.get(self.chat_home_url)
 
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'chat/chat_components/chat_home.html')
+        self.assertTemplateUsed(response, 'chat/chat_components/home.html')
 
     def test_chat_room_view_GET(self):
         response = self.client.get(self.chat_room_url)

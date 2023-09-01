@@ -3,7 +3,7 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.models import User
 from .forms import RegistrationForm, LoginForm
 from django.urls import reverse_lazy
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.contrib.auth import login, authenticate
 from django.http.response import JsonResponse
 
@@ -38,7 +38,6 @@ class RegisterView(CreateView):
 
         return response
 
-
 class LoginView(LoginView):
     form_class = LoginForm
     template_name = 'main/login.html'
@@ -55,3 +54,7 @@ class LoginView(LoginView):
 
 class LogoutView(LogoutView):
     next_page = reverse_lazy('home')
+
+
+def terms_of_service_view(request):
+    return render(request, 'main/terms_of_service.html')
