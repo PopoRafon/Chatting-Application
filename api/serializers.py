@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from main.models import Profile
-from chat.models import ChatMessage
+from chat.models import ChatMessage, Chat
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -26,3 +26,8 @@ class ChatMessageSerializer(serializers.ModelSerializer):
 
     def get_modified(self, obj):
         return obj.modified.strftime("%Y-%m-%d %H:%M")
+
+
+class ChatSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Chat

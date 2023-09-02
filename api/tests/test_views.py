@@ -147,7 +147,11 @@ class TestSingleChatMessageViews(APITestCase):
     def test_single_chat_message_GET_authenticated_user_not_in_chat(self):
         self.client.force_login(self.user)
 
-        response = self.client.get(self.url)
+        second_user =  User.objects.create(username='second user')
+        ChatMessage.objects.create(chat=self.chat, sender=second_user, body='second test message')
+        second_message_url = reverse('api-chat-messages-single', kwargs={'id': 2, 'chat_id': 1})
+
+        response = self.client.get(second_message_url)
         
         self.assertEqual(response.status_code, 403)
 
@@ -169,10 +173,14 @@ class TestSingleChatMessageViews(APITestCase):
     def test_single_chat_message_DELETE_authenticated_user_not_in_chat(self):
         self.client.force_login(self.user)
 
-        response = self.client.delete(self.url)
+        second_user =  User.objects.create(username='second user')
+        ChatMessage.objects.create(chat=self.chat, sender=second_user, body='second test message')
+        second_message_url = reverse('api-chat-messages-single', kwargs={'id': 2, 'chat_id': 1})
+
+        response = self.client.get(second_message_url)
 
         self.assertEqual(response.status_code, 403)
-        self.assertEqual(len(ChatMessage.objects.all()), 1)
+        self.assertEqual(len(ChatMessage.objects.all()), 2)
 
     def test_single_chat_message_DELETE_user_in_chat(self):
         self.client.force_login(self.user)
@@ -207,10 +215,14 @@ class TestSingleChatMessageViews(APITestCase):
     def test_single_chat_message_PUT_authenticated_user_not_in_chat(self):
         self.client.force_login(self.user)
 
-        response = self.client.put(self.url, self.put_body)
+        second_user =  User.objects.create(username='second user')
+        ChatMessage.objects.create(chat=self.chat, sender=second_user, body='second test message')
+        second_message_url = reverse('api-chat-messages-single', kwargs={'id': 2, 'chat_id': 1})
+
+        response = self.client.put(second_message_url, self.put_body)
 
         self.assertEqual(response.status_code, 403)
-        self.assertNotEqual(ChatMessage.objects.get(id=1).body, self.put_body['body'])
+        self.assertNotEqual(ChatMessage.objects.get(id=2).body, self.put_body['body'])
 
     def test_single_chat_message_PUT_user_in_chat(self):
         self.client.force_login(self.user)
@@ -264,5 +276,5 @@ class TestChatViews(APITestCase):
 
         response = self.client.delete(self.url)
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 204)
         self.assertEqual(len(Chat.objects.all()), 0)
