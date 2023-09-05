@@ -45,4 +45,3 @@ class ChatRoomView(LoginRequiredMixin, DetailView):
         context['messages'] = self.get_object().messages.all().prefetch_related('sender__profile')[:25]
         
         return context
-    

@@ -30,9 +30,7 @@
 {% block scripts %}
     {{ request.user.profile.alias|json_script:"user" }}
     {{ id|json_script:"chat-name" }}
-    <script src="{% static 'js/main.js' %}"></script>
     <script src="{% static 'js/chat/sockets.js' %}"></script>
     <script src="{% static 'js/chat/chat_room_visuals.js' %}"></script>
     <script src="{% static 'js/chat/chat_room_func.js' %}"></script>
-    <script src="{% static 'js/chat/modal.js' %}"></script>
 {% endblock %}

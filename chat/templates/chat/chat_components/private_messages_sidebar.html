@@ -1,22 +1,57 @@
 {% load static %}
 
-<div id="private-messages-sidebar" class="left-16 bottom-0 z-40 absolute lg:static lg:-translate-x-0 text-base flex flex-col overflow-y-auto invisible-scrollbar items-center lg:top-0 lg:left-0 w-64 h-[calc(100vh-3rem)] lg:h-screen transition-transform border-r border-zinc-700/30 -translate-x-[calc(4rem+16rem)]" style="background-color: #2d2d2f">
+<div id="private-messages-sidebar" class="left-0 bottom-0 z-40 absolute lg:static lg:-translate-x-0 text-base flex flex-col items-center lg:top-0 lg:left-0 w-64 h-[calc(100vh-3rem)] lg:h-screen transition-transform border-r border-zinc-700/30 -translate-x-[calc(16rem)]" style="background-color: #2d2d2f">
     <div class="w-full">
-        <div class="space-y-3 text-center justify-center py-3 sticky top-0 border-b border-zinc-700/30" style="background-color: #2d2d2f">
-            <input type="text" placeholder="Search for conversation" class="rounded-full py-1 px-3 placeholder:text-center focus:placeholder:text-transparent focus:outline-none bg-zinc-700/70">
-            <p class="flex justify-center mb-3">Private messages</p>
+        <div class="z-20 space-y-3 text-center justify-center py-3 sticky top-0 border-b border-zinc-700/30" style="background-color: #2d2d2f">
+            <input id="conversation-search" type="text" placeholder="Search for conversation" class="rounded-full py-1 px-3 placeholder:text-center focus:placeholder:text-transparent focus:outline-none bg-zinc-700/70">
+            <div class="flex justify-center mb-3">
+                <button id="inbox-button" class="flex justify-center items-center absolute left-2 self-center group/inbox">
+                    <img src="{% static 'images/buttons/notification_button.png' %}" class="h-4 w-4">
+                    <span class="hidden absolute rounded-md group-hover/inbox:flex bg-zinc-700 text-white py-1 w-[calc(50px)] -translate-y-7 translate-x-3 text-sm justify-center">Inbox</span>
+                </button>
+                <span>Private messages</span>
+                <button id="add-new-chat-button" class="flex justify-center items-center absolute right-2 self-center group/tooltip">
+                    <img src="{% static 'images/buttons/add_new_chat.png' %}" class="h-4 w-4">
+                    <span class="hidden absolute rounded-md group-hover/tooltip:flex bg-zinc-700 text-white py-1 w-[calc(120px)] -translate-y-7 text-sm justify-center">Create new chat</span>
+                </button>
+            </div>
+            <div id="inbox" class="flex-col absolute rounded-md border border-zinc-700 text-white w-[calc(300px)] h-[calc(200px)] left-1 lg:-left-2 lg:translate-x-[calc(5%)] -translate-y-3 hidden" style="background-color: rgb(48, 48, 52)">
+                <p class="border-b border-zinc-700 py-2">Requests</p>
+                <ul class="h-[calc(100%-42px)] text-sm bg-zinc-800/50 overflow-y-auto invisible-scrollbar">
+                    {% for request in user.received_requests.all %}
+                        <li id="request-{{ request.id }}" class="flex hover:bg-zinc-800/40 p-1 w-full justify-between">
+                            <span class="font-medium">{{ request.sender }}</span>
+                            <span>{{ request.content }}</span>
+                            <div>
+                                <button class="request-button" data-request-id="{{ request.id }}" data-request-decision="accept">
+                                    <img src="{% static 'images/buttons/accept_request_button.png' %}" class="h-5 w-5">
+                                </button>
+                                <button class="request-button" data-request-id="{{ request.id }}" data-request-decision="reject">
+                                    <img src="{% static 'images/buttons/reject_request_button.png' %}" class="h-5 w-5">
+                                </button>
+                            </div>
+                            </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div id="add-new-chat-box" class="flex-col absolute rounded-md border border-zinc-700 text-white w-[calc(225px)] right-0 lg:translate-x-[calc(90%)] -translate-y-3 py-2 hidden" style="background-color: rgb(48, 48, 52)">
+                <form id="add-new-chat-form" method="POST" class="space-y-2 text-sm" novalidate>
+                    {% csrf_token %}
+                    <input id="user-to-request" type="text" placeholder="Enter users identifier" class="rounded-xl px-2 py-1 bg-zinc-800 w-[calc(85%)] text-center">
+
+                    <input type="submit" value="Send request" class="rounded-full bg-zinc-600/40 py-1 px-2 border border-zinc-600/50 hover:bg-zinc-600/30 hover:border-zinc-600/40 cursor-pointer">
+                </form>
+            </div>
         </div>
-        <div>
-            <ul class="flex flex-1 flex-col overflow-y-auto overflow-x-hidden invisible-scrollbar -translate-x-0 h-[calc(100vh-93px-49px-3rem)] lg:h-[calc(100vh-93px-49px)]">
+        <div class="z-10">
+            <ul id="chats-list" class="flex flex-1 flex-col overflow-y-auto overflow-x-hidden invisible-scrollbar -translate-x-0 h-[calc(100vh-93px-49px-3rem)] lg:h-[calc(100vh-93px-49px)]">
                 {% for chat in user_chats %}
                     <li id="chat-{{ chat.id }}" class="flex justify-center group/chat hover:bg-zinc-700/30">
                         <a href="{% url 'chat-room' chat.id %}" class="flex justify-left items-center w-full py-2 pl-3 pr-8">
                             {% for user in chat.users.all %}
                                 {% if user != request.user %}
                                     <img src="{{ user.profile.avatar.url }}" class="rounded-full h-8 w-8 mr-2">
-                                    <p class="truncate text-md">
-                                        {{ user.profile.alias }}
-                                    </p>
+                                    <p class="truncate text-md">{{ user.profile.alias }}</p>
                                 {% endif %}
                             {% endfor %}
                         </a>

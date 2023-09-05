@@ -18,9 +18,12 @@
         
         {% endblock %}
 
+        <script src="{% static 'js/main.js' %}"></script>
+        <script src="{% static 'js/chat/notifications.js' %}"></script>
         {% block scripts %}
         
         {% endblock %}
+        <script src="{% static 'js/chat/modal.js' %}"></script>
         <script src="{% static 'js/chat/mobile.js' %}"></script>
     </body>
 {% endblock %}

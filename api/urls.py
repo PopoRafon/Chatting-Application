@@ -4,8 +4,8 @@ from . import views
 from django.views.generic import TemplateView
 
 schema_view = get_schema_view(
-    title='OpenAPI Discord Clone',
-    description='The Discord Clone API is designed to provide the necessary functionality for managing users and chat messages within a Discord-like application. This API allows you to perform operations such as retrieving user information, fetching chat messages, and managing chat rooms.',
+    title='OpenAPI Chatting Application',
+    description='Chatting Application API is designed to provide the necessary functionality for managing users and chat messages.',
     version='1.0.0'
 )
 
@@ -20,4 +20,6 @@ urlpatterns = [
     path('chat/<chat_id>/messages', views.AllChatMessagesAPIView.as_view(), name='api-chat-messages-all'),
     path('chat/<chat_id>/messages/<id>', views.SingleChatMessageAPIView.as_view(), name='api-chat-messages-single'),
     path('chat/<id>', views.ChatAPIView.as_view(), name='api-chat'),
+    path('requests', views.RequestAPIView.as_view(), name='api-request'),
+    path('requests/<id>', views.RequestDecisionAPIView.as_view(), name='api-request-decision')
 ]

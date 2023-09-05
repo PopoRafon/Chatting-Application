@@ -1,5 +1,5 @@
-# Discord Clone
-Real-time communication application built using Python with Django framework and Django channels.
+# Chatting Application
+Real-time chatting application built using Python with Django framework and Django channels.
 ## Installation
 1. Open up your terminal.
 2. If you don't have installed Python run `sudo apt-get update` `sudo apt-get install python3` command on Linux.

@@ -45,3 +45,20 @@ class TestChatUrls(APISimpleTestCase):
         resolver = resolve(url)
 
         self.assertEqual(resolver.func.view_class, views.ChatAPIView)
+
+
+class TestRequestUrls(APISimpleTestCase):
+
+    def test_request_url_resolves(self):
+        url = reverse('api-request')
+    
+        resolver = resolve(url)
+
+        self.assertEqual(resolver.func.view_class, views.RequestAPIView)
+
+    def test_request_decision_url_resolves(self):
+        url = reverse('api-request-decision', kwargs={'id': 1})
+
+        resolver = resolve(url)
+
+        self.assertEqual(resolver.func.view_class, views.RequestDecisionAPIView)
