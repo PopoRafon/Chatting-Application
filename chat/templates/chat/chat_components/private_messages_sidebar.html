@@ -63,10 +63,10 @@
             </ul>
         </div>
         <div class="bottom-0 border-t border-zinc-700/30 h-[calc(48px)]">
-            <a href="#" class="flex justify-left w-full h-full space-x-2 pl-2 pr-8 hover:bg-zinc-700/20">
+            <button id="show-user-profile-button" class="flex justify-left w-full h-full space-x-2 pl-2 pr-8 hover:bg-zinc-700/20">
                 <img src="{{ request.user.profile.avatar.url }}" class="rounded-full h-8 w-8 my-auto">
                 <span class="my-auto truncate">{{ request.user.profile.alias }}</span>
-            </a>
+            </button>
             <a href="{% url 'logout' %}" class="absolute bottom-[calc(14px)] right-2">
                 <img src="{% static 'images/buttons/logout_button.png' %}" class="h-5 w-5">
             </a>

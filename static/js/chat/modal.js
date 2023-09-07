@@ -78,6 +78,9 @@ function deleteChatRequest(id) {
             window.location.href = '/channels/@me';
         }
     })
+    .catch(err => {
+        console.log(err);
+    })
 }
 
 function toggleDeletionModal(type, id) {

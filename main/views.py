@@ -1,5 +1,5 @@
 from django.views.generic import TemplateView, CreateView
-from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView, PasswordResetView
 from django.contrib.auth.models import User
 from .forms import RegistrationForm, LoginForm
 from django.urls import reverse_lazy
@@ -54,6 +54,14 @@ class LoginView(LoginView):
 
 class LogoutView(LogoutView):
     next_page = reverse_lazy('home')
+
+
+class PasswordChangeView(PasswordChangeView):
+    pass
+
+
+class PasswordResetView(PasswordResetView):
+    pass
 
 
 def terms_of_service_view(request):

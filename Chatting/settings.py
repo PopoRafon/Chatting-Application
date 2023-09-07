@@ -69,7 +69,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'Discord.urls'
+ROOT_URLCONF = 'Chatting.urls'
 
 TEMPLATES = [
     {
@@ -89,9 +89,9 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'Discord.wsgi.application'
+WSGI_APPLICATION = 'Chatting.wsgi.application'
 
-ASGI_APPLICATION = 'Discord.asgi.application'
+ASGI_APPLICATION = 'Chatting.asgi.application'
 
 CHANNEL_LAYERS = {
     'default': {
@@ -156,13 +156,13 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-MEDIA_URL = 'images/'
+MEDIA_URL = 'media/'
 
 STATICFILES_DIRS  = [
     BASE_DIR / 'static'
 ]
 
-MEDIA_ROOT = BASE_DIR / 'static/images'
+MEDIA_ROOT = BASE_DIR / 'media/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

@@ -4,6 +4,8 @@ const addNewChatForm = document.getElementById('add-new-chat-form');
 const inboxButton = document.getElementById('inbox-button');
 const inbox = document.getElementById('inbox');
 const requestButtons = document.querySelectorAll('.request-button');
+const alertBox = document.getElementById('alert-box');
+const alertMessage = document.getElementById('alert-message');
 
 
 requestButtons.forEach((button) => {
@@ -27,7 +29,19 @@ requestButtons.forEach((button) => {
             return response.json();
         })
         .then((data) => {
-            console.log(data);
+            if (data.success) {
+                const body = data.success;
+    
+                alertBox.classList.toggle('hidden');
+                alertMessage.innerText = body;
+    
+                setTimeout(() => {
+                    alertBox.classList.toggle('hidden');
+                }, 3000)
+            }
+        })
+        .catch(error => {
+            console.log(error);
         })
 
         requestBox.remove();
@@ -64,6 +78,9 @@ addNewChatForm.addEventListener('submit', (event) => {
     })
     .then((data) => {
         console.log(data);
+    })
+    .catch(error => {
+        console.log(error)
     })
 
     userToRequest.value = '';

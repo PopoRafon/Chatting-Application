@@ -4,8 +4,8 @@ from django import forms
 
 
 class RegistrationForm(UserCreationForm):
-    email = forms.EmailField(max_length=60, label='Email address', min_length=4, required=True)
-    username = forms.CharField(max_length=40, min_length=2, label='Username', required=True)
+    email = forms.EmailField(max_length=60, min_length=8, label='Email address', required=True)
+    username = forms.CharField(max_length=16, min_length=4, label='Username', required=True)
 
     class Meta:
         model = User
@@ -13,5 +13,5 @@ class RegistrationForm(UserCreationForm):
 
 
 class LoginForm(AuthenticationForm):
-    username = forms.CharField(max_length=40, min_length=2, label='Username', required=True)
-    password = forms.CharField(max_length=60, min_length=4, label='Password', widget=forms.PasswordInput(), required=True)
+    password = forms.CharField(max_length=60, label='Password', widget=forms.PasswordInput(), required=True)
+    username = forms.CharField(max_length=16, min_length=4, label='Username', required=True)

@@ -1,10 +1,10 @@
-from .serializers import UserSerializer, ChatMessageSerializer, ChatSerializer, RequestSerializer
+from .serializers import UserRetrieveSerializer, UserUpdateSerializer, ChatMessageSerializer, ChatSerializer, RequestSerializer
 from main.models import Profile
 from chat.models import Chat, ChatMessage, Request
 from rest_framework import generics, status
 from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
-from .permissions import ChatMessageObjectPermissions, ChatMessageModelPermissions, ChatObjectPermissions
+from .permissions import ChatMessageObjectPermissions, ChatMessageModelPermissions, ChatObjectPermissions, UserObjectPermissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.contrib.auth.models import User
@@ -12,19 +12,28 @@ from django.core.exceptions import ObjectDoesNotExist
 
 
 class AllUsersAPIView(generics.ListAPIView):
-    serializer_class = UserSerializer
+    serializer_class = UserRetrieveSerializer
 
     def get_queryset(self):
         return Profile.objects.all()
 
 
-class SingleUserAPIView(generics.RetrieveAPIView):
-    serializer_class = UserSerializer
+class SingleUserAPIView(generics.RetrieveUpdateAPIView):
     lookup_field = 'id'
+    permission_classes = [IsAuthenticated, UserObjectPermissions]
+    serializer_class = {
+        'retrieve': UserRetrieveSerializer,
+        'update': UserUpdateSerializer
+    }
 
-    def get_object(self):
-        id = self.kwargs['id']
-        return Profile.objects.get(id=id)
+    def get_queryset(self):
+        return Profile.objects.all()
+
+    def get_serializer_class(self):
+        if self.request.method == 'PATCH' or self.request.method == 'PUT':
+            return self.serializer_class.get('update')
+        else:
+            return self.serializer_class.get('retrieve')
 
 
 class AllChatMessagesAPIView(generics.ListCreateAPIView):

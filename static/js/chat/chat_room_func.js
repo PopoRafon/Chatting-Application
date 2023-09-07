@@ -7,7 +7,7 @@ chat.addEventListener('scroll', async function() {
         blockNewRequests = true;
 
         const messagesLength = chat.children.length;
-        const url = `${window.location.origin}/api/v1/chat/${roomName}/messages?start=${messagesLength}&end=${messagesLength+20}`;
+        const url = `/api/v1/chat/${roomName}/messages?start=${messagesLength}&end=${messagesLength+20}`;
         const chatScrollTop = chat.scrollTop;
 
         await fetch(url, {
@@ -35,8 +35,8 @@ chat.addEventListener('scroll', async function() {
                 }, 300)
             });
         })
-        .catch((err) => {
-            console.log(err);
+        .catch(error => {
+            console.log(error);
         });
     }
 })

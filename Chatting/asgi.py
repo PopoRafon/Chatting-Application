@@ -7,7 +7,7 @@ from channels.security.websocket import AllowedHostsOriginValidator
 import chat.routing
 
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Discord.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Chatting.settings')
 
 application = ProtocolTypeRouter(
     {
