@@ -9,6 +9,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
+from rest_framework.parsers import MultiPartParser
 
 
 class AllUsersAPIView(generics.ListAPIView):
@@ -21,6 +22,7 @@ class AllUsersAPIView(generics.ListAPIView):
 class SingleUserAPIView(generics.RetrieveUpdateAPIView):
     lookup_field = 'id'
     permission_classes = [IsAuthenticated, UserObjectPermissions]
+    parser_classes = [MultiPartParser]
     serializer_class = {
         'retrieve': UserRetrieveSerializer,
         'update': UserUpdateSerializer

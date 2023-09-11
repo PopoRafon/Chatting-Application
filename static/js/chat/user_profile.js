@@ -38,20 +38,21 @@ saveUserProfileButton.addEventListener('click', () => {
     const email = document.getElementById(`edit-profile-email`).textContent;
     const alias = document.getElementById(`edit-profile-alias`).textContent;
     const description = document.getElementById(`edit-profile-description`).textContent;
+    const avatar = document.getElementById('edit-profile-avatar').files[0];
     const csrftoken = getCookie('csrftoken');
+    const formData = new FormData();
+    formData.append('username', username);
+    formData.append('email', email);
+    formData.append('alias', alias);
+    formData.append('description', description);
+    formData.append('avatar', avatar);
 
     fetch(`/api/v1/users/${id}`, {
         method: 'PATCH',
         headers: {
-            'X-CSRFToken': csrftoken,
-            'Content-Type': 'application/json'
+            'X-CSRFToken': csrftoken
         },
-        body: JSON.stringify({
-            username: username,
-            email: email,
-            alias: alias,
-            description: description
-        })
+        body: formData
     })
     .then(response => {
         if (response.ok) {

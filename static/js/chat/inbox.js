@@ -37,7 +37,7 @@ requestButtons.forEach((button) => {
     
                 setTimeout(() => {
                     alertBox.classList.toggle('hidden');
-                }, 3000)
+                }, 2000)
             }
         })
         .catch(error => {

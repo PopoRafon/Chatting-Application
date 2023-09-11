@@ -1,3 +1,12 @@
+const passwordAlert = document.getElementById('password-alert');
+
+
+if (passwordAlert) {
+    setTimeout(() => {
+        passwordAlert.remove();
+    }, 2000)
+}
+
 function getCookie(name) {
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);

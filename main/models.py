@@ -4,8 +4,8 @@ from django.contrib.auth.models import User
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
-    alias = models.CharField(max_length=32, blank=True)
-    avatar = models.ImageField(null=True, default='avatar.png', upload_to='images/')
+    alias = models.CharField(max_length=16, blank=True)
+    avatar = models.ImageField(null=True, default='avatar.png', upload_to='avatars/')
     description = models.CharField(blank=True, max_length=200)
 
     def __str__(self):

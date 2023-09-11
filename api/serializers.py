@@ -26,8 +26,8 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         return super().update(instance, validated_data)
         
     def validate(self, data):
-        username = data['username']
-        email = data['email']
+        username = data.pop('username', None)
+        email = data.pop('email', None)
         check_username_in_db = User.objects.filter(username=username).first()
         check_email_in_db = User.objects.filter(email=email).first()
         context = self.context['request']

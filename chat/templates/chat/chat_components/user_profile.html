@@ -13,10 +13,13 @@
         <div class="flex w-full h-full justify-center text-base">
             <ul class="flex flex-col justify-evenly w-[calc(350px)]">
                 <li class="translate-x-0">
-                    <img src="{{ request.user.profile.avatar.url }}" class="h-40 w-40 mx-auto">
-                    <button class="absolute border border-zinc-700 bg-zinc-700 rounded-lg right-[calc(32%)] bottom-1 h-7 w-7">
-                        <img src="{% static 'images/buttons/edit_message_button.png' %}">
-                    </button>
+                    <img src="{{ request.user.profile.avatar.url }}" class="h-40 w-40 mx-auto rounded-full">
+                    <div>
+                        <label for="edit-profile-avatar" class="absolute border border-zinc-700 bg-zinc-700 rounded-lg right-[calc(32%)] bottom-1 h-7 w-7 cursor-pointer">
+                            <img src="{% static 'images/buttons/edit_message_button.png' %}">
+                        </label>
+                        <input id="edit-profile-avatar" type="file" class="hidden">
+                    </div>
                 </li>
                 <li class="flex">
                     <span class="font-bold mx-auto">Identifier: <span class="font-normal" id="edit-profile-identifier">{{ request.user.id }}</span></span>

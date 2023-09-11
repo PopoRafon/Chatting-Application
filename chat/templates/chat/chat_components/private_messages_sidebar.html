@@ -19,8 +19,8 @@
                 <p class="border-b border-zinc-700 py-2">Requests</p>
                 <ul class="h-[calc(100%-42px)] text-sm bg-zinc-800/50 overflow-y-auto invisible-scrollbar">
                     {% for request in user.received_requests.all %}
-                        <li id="request-{{ request.id }}" class="flex hover:bg-zinc-800/40 p-1 w-full justify-between">
-                            <span class="font-medium">{{ request.sender }}</span>
+                        <li id="request-{{ request.id }}" class="hover:bg-zinc-800/40 p-1 w-full justify-between">
+                            <p class="font-medium">{{ request.sender }}</p>
                             <span>{{ request.content }}</span>
                             <div>
                                 <button class="request-button" data-request-id="{{ request.id }}" data-request-decision="accept">

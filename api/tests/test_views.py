@@ -42,7 +42,7 @@ class TestSingleUserViews(APITestCase):
         response = self.client.get(self.url)
 
         self.assertEqual(response.status_code, 200)
-        self.assertDictContainsSubset({'username': 'user', 'alias': 'user'}, response.data)
+        self.assertDictContainsSubset({'identifier': 1, 'alias': 'user'}, response.data)
 
 
 class TestAllChatMessagesViews(APITestCase):

@@ -1,11 +1,12 @@
 from django.views.generic import TemplateView, CreateView
-from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView, PasswordResetView
+from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView, PasswordResetView, PasswordResetConfirmView
 from django.contrib.auth.models import User
 from .forms import RegistrationForm, LoginForm
 from django.urls import reverse_lazy
 from django.shortcuts import redirect, render
 from django.contrib.auth import login, authenticate
 from django.http.response import JsonResponse
+from django.contrib import messages 
 
 
 class HomeView(TemplateView):
@@ -57,11 +58,31 @@ class LogoutView(LogoutView):
 
 
 class PasswordChangeView(PasswordChangeView):
-    pass
+    success_url = reverse_lazy('chat-home')
+    template_name = 'main/password_change.html'
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Your password has been successfuly changed.')
+        return super().form_valid(form)
 
 
 class PasswordResetView(PasswordResetView):
-    pass
+    success_url = reverse_lazy('home')
+    email_template_name = 'main/email/password_reset_email.html'
+    template_name = 'main/password_reset.html'
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Password reset link was sent to your email.')
+        return super().form_valid(form)
+
+
+class PasswordResetConfirmView(PasswordResetConfirmView):
+    success_url = reverse_lazy('login')
+    template_name = 'main/password_reset_confirm.html'
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Your password has been successfuly changed.')
+        return super().form_valid(form)
 
 
 def terms_of_service_view(request):
