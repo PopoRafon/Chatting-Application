@@ -16,7 +16,7 @@ class AllUsersAPIView(generics.ListAPIView):
     serializer_class = UserRetrieveSerializer
 
     def get_queryset(self):
-        return Profile.objects.all()
+        return Profile.objects.all().prefetch_related('user')
 
 
 class SingleUserAPIView(generics.RetrieveUpdateAPIView):
@@ -29,7 +29,7 @@ class SingleUserAPIView(generics.RetrieveUpdateAPIView):
     }
 
     def get_queryset(self):
-        return Profile.objects.all()
+        return Profile.objects.all().prefetch_related('user')
 
     def get_serializer_class(self):
         if self.request.method == 'PATCH' or self.request.method == 'PUT':
@@ -54,7 +54,7 @@ class AllChatMessagesAPIView(generics.ListCreateAPIView):
     def get_queryset(self):
         query_string = self.request.GET
         chat_id = self.kwargs['chat_id']
-        messages = ChatMessage.objects.filter(chat__id=chat_id)
+        messages = ChatMessage.objects.filter(chat__id=chat_id).prefetch_related('sender', 'sender__profile')
 
         if query_string:
             start = query_string.get('start')
@@ -127,10 +127,10 @@ class RequestDecisionAPIView(APIView):
         try:
             user = request.user
             id = kwargs['id']
-            request_object = Request.objects.get(id=id)
-            content = request_object.content
+            request_obj = Request.objects.get(id=id)
+            content = request_obj.content
 
-            if user == request_object.receiver:
+            if user == request_obj.receiver:
                 return Response({'content': content}, status=status.HTTP_200_OK)
             else:
                 return self.permission_denied(request, 'You need to be request receiver to view this page.')
@@ -140,21 +140,21 @@ class RequestDecisionAPIView(APIView):
     def post(self, request, *args, **kwargs):
         try:
             id = kwargs['id']
-            request_object = Request.objects.get(id=id)
+            request_obj = Request.objects.get(id=id)
             data = request.data
             decision = data['decision']
             user = request.user
 
-            if user == request_object.receiver:
+            if user == request_obj.receiver:
                 if decision == 'accept':
-                    request_object.delete()
-                    sender = request_object.sender
+                    request_obj.delete()
+                    sender = request_obj.sender
                     chat = Chat.objects.create()
                     chat.users.add(user, sender)
 
                     return Response({'success': 'Request was successfuly accepted and new chat has been created.'}, status=status.HTTP_201_CREATED)
                 elif decision == 'reject':
-                    request_object.delete()
+                    request_obj.delete()
 
                     return Response({'success': 'Request was successfuly rejected.'}, status=status.HTTP_200_OK)
                 else:

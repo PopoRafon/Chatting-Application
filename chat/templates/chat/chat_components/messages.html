@@ -1,7 +1,7 @@
 {% load static %}
 {% load time_filters %}
 
-{% for message in messages %}
+{% for message in chat_messages %}
     <li id="message-{{ message.id }}" class="flex relative group/toolbar rounded-xl hover:bg-zinc-800/30 px-2 mt-4">
         <div class="top-0 left-0 h-full w-12 mr-1 mt-1">
             <img src="{{ message.sender.profile.avatar.url }}" class="rounded-full h-11 w-11">

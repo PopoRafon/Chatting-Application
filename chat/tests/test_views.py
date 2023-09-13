@@ -11,7 +11,7 @@ class TestChatViews(TestCase):
         self.user = User.objects.create(username='test')
         self.chat = Chat.objects.create()
         self.chat_home_url = reverse('chat-home')
-        self.chat_room_url = reverse('chat-room', kwargs={'id': 1})
+        self.chat_room_url = reverse('chat-room', kwargs={'id': self.chat.id})
 
     def test_chat_home_view_GET(self):
         response = self.client.get(self.chat_home_url)

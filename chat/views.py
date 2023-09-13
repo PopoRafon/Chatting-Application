@@ -30,8 +30,7 @@ class ChatRoomView(LoginRequiredMixin, DetailView):
         return super().dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
-        queryset = super().get_queryset()
-        return queryset.prefetch_related('users', 'users__profile')
+        return super().get_queryset().prefetch_related('users', 'users__profile')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -42,6 +41,6 @@ class ChatRoomView(LoginRequiredMixin, DetailView):
         context['user_chats'] = user.chats.prefetch_related('users', 'users__profile')
         context['id'] = self.kwargs['id']
         context['opposite_user'] = chat_users.first() if chat_users.first() != user else chat_users.last()
-        context['messages'] = self.get_object().messages.all().prefetch_related('sender__profile')[:25]
+        context['chat_messages'] = self.get_object().messages.all().prefetch_related('sender__profile')[:25]
         
         return context

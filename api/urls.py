@@ -2,6 +2,7 @@ from django.urls import path
 from rest_framework.schemas import get_schema_view
 from . import views
 from django.views.generic import TemplateView
+from django.contrib.auth.decorators import login_required
 
 schema_view = get_schema_view(
     title='OpenAPI Chatting Application',
@@ -10,10 +11,10 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
-    path('', TemplateView.as_view(
+    path('', login_required(TemplateView.as_view(
         template_name='swagger-ui.html',
-        extra_context={'schema_url':'openapi-schema'}
-    ), name='api-home'),
+        extra_context={'schema_url':'openapi-schema'},
+    )), name='api-home'),
     path('openapi-schema', schema_view, name='openapi-schema'),
     path('users', views.AllUsersAPIView.as_view(), name='api-users-all'),
     path('users/<id>', views.SingleUserAPIView.as_view(), name='api-users-single'),

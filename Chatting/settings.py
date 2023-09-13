@@ -17,9 +17,9 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost']
 
-# SQL Queries logger
+# SQL Queries logger only for development purposes
 # LOGGING = {
 #     'version': 1,
 #     'filters': {
@@ -114,9 +114,16 @@ REST_FRAMEWORK = {
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'OPTIONS': {
+            'read_default_file': 'Chatting/my.cnf'
+        }
     }
+    # If you don't want to use mysql you can remove above configuration and use below instead
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / 'db.sqlite3',
+    # }
 }
 
 
@@ -177,12 +184,11 @@ LOGIN_URL = '/login/'
 
 if DEBUG:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
-EMAIL_HOST = 'localhost'
-EMAIL_PORT = '1025'
-EMAIL_HOST_USER = ''
-EMAIL_HOST_PASSWORD = ''
-EMAIL_USE_TLS = False
-DEFAULT_FROM_EMAIL = 'testing@example.com'
+else:
+    EMAIL_HOST = 'smtp.gmail.com'
+    EMAIL_PORT = '587'
+    EMAIL_USE_TLS = True
+    EMAIL_HOST_USER = env('EMAIL_USER')
+    EMAIL_HOST_PASSWORD = env('EMAIL_PASSWORD')
 
 PASSWORD_RESET_TIMEOUT = 7200

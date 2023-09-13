@@ -25,3 +25,33 @@ class TestAccountUrls(SimpleTestCase):
         resolver = resolve(url)
 
         self.assertEqual(resolver.func.view_class, views.LoginView)
+
+
+class TestTermsOfServiceUrls(SimpleTestCase):
+
+    def test_terms_of_service_url_resolves(self):
+        url = reverse('terms-of-service')
+        resolver = resolve(url)
+
+        self.assertEqual(resolver.func, views.terms_of_service_view)
+
+
+class TestPasswordUrls(SimpleTestCase):
+
+    def test_password_change_url_resolves(self):
+        url = reverse('password-change')
+        resolver = resolve(url)
+
+        self.assertEqual(resolver.func.view_class, views.PasswordChangeView)
+
+    def test_password_reset_url_resolves(self):
+        url = reverse('password-reset')
+        resolver = resolve(url)
+
+        self.assertEqual(resolver.func.view_class, views.PasswordResetView)
+
+    def test_password_reset_confirm_url_resolves(self):
+        url = reverse('password-reset-confirm', kwargs={'uidb64': '1', 'token': '1'})
+        resolver = resolve(url)
+
+        self.assertEqual(resolver.func.view_class, views.PasswordResetConfirmView)

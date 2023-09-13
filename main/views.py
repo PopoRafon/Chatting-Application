@@ -10,13 +10,13 @@ from django.contrib import messages
 
 
 class HomeView(TemplateView):
-    template_name = 'main/home.html'
+    template_name = 'main/home/home.html'
 
 
 class RegisterView(CreateView):
     model = User
     form_class = RegistrationForm
-    template_name = 'main/register.html'
+    template_name = 'main/account/register.html'
     success_url = reverse_lazy('chat-home')
 
     def dispatch(self, request, *args, **kwargs):
@@ -41,7 +41,7 @@ class RegisterView(CreateView):
 
 class LoginView(LoginView):
     form_class = LoginForm
-    template_name = 'main/login.html'
+    template_name = 'main/account/login.html'
     redirect_authenticated_user = True
     next_page = reverse_lazy('chat-home')
     
@@ -59,7 +59,7 @@ class LogoutView(LogoutView):
 
 class PasswordChangeView(PasswordChangeView):
     success_url = reverse_lazy('chat-home')
-    template_name = 'main/password_change.html'
+    template_name = 'main/password/password_change.html'
 
     def form_valid(self, form):
         messages.success(self.request, 'Your password has been successfuly changed.')
@@ -69,7 +69,7 @@ class PasswordChangeView(PasswordChangeView):
 class PasswordResetView(PasswordResetView):
     success_url = reverse_lazy('home')
     email_template_name = 'main/email/password_reset_email.html'
-    template_name = 'main/password_reset.html'
+    template_name = 'main/password/password_reset.html'
 
     def form_valid(self, form):
         messages.success(self.request, 'Password reset link was sent to your email.')
@@ -78,7 +78,7 @@ class PasswordResetView(PasswordResetView):
 
 class PasswordResetConfirmView(PasswordResetConfirmView):
     success_url = reverse_lazy('login')
-    template_name = 'main/password_reset_confirm.html'
+    template_name = 'main/password/password_reset_confirm.html'
 
     def form_valid(self, form):
         messages.success(self.request, 'Your password has been successfuly changed.')

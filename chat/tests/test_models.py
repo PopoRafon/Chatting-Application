@@ -1,5 +1,5 @@
 from django.test import TestCase
-from chat.models import Chat, ChatMessage
+from chat.models import Chat, ChatMessage, Request
 from django.contrib.auth.models import User
 
 
@@ -20,3 +20,18 @@ class TestChatModels(TestCase):
         self.assertEqual(self.chat.messages.count(), 1)
         self.assertEqual(self.chat.messages.first().sender, self.first_user)
         self.assertEqual(self.chat.messages.first().body, 'test body')
+
+
+class TestRequestModels(TestCase):
+
+    def setUp(self):
+        self.first_user = User.objects.create(username='first_user')
+        self.second_user = User.objects.create(username='second_user')
+        self.request = Request.objects.create(sender=self.first_user, receiver=self.second_user)
+
+    def test_request_users_are_set_correctly(self):
+        self.assertEqual(self.request.sender, self.first_user)
+        self.assertEqual(self.request.receiver, self.second_user)
+
+    def test_request_content_is_set_correctly(self):
+        self.assertEqual(self.request.content, 'Do you want to create new chat?')
