@@ -1,0 +1,16 @@
+{% load static %}
+
+<div id="chat-container" class="lg:-translate-x-0 lg:flex-1 flex flex-col h-[calc(100vh-3rem)] lg:h-screen w-screen lg:w-[1250px] overflow-y-auto invisible-scrollbar transition-transform">
+    <div class="flex items-center top-0 w-full h-16 px-5 border-b border-zinc-700/30 bg-zinc-800/30">
+        <img src="{{ opposite_user.profile.avatar.url }}" class="rounded-full h-9 w-9 mr-2">
+        <a href="#" class="hover:text-white text-base lg:text-lg">{{ opposite_user.profile.alias }}</a>
+    </div>
+    <ul id="messages-container" class="flex flex-1 flex-col-reverse overflow-y-auto overflow-x-hidden invisible-scrollbar lg:visible-scrollbar w-full text-left px-2">
+        {% include 'chat/messages/messages.html' %}
+    </ul>
+    <div class="max-h-screen flex justify-center mt-auto bottom-0 py-7 w-full">
+        <div class="flex justify-center w-2/3">
+            <textarea id="message-input" placeholder="Send message to {{ opposite_user.username }}" class="text-sm lg:text-base rounded-xl p-3 bg-zinc-700 w-full resize-none invisible-scrollbar" rows="1"></textarea>
+        </div>
+    </div>
+</div>

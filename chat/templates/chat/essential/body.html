@@ -1,0 +1,36 @@
+{% extends 'main.html' %}
+
+{% load static %}
+
+{% block body %}
+    <body class="bg-zinc-900/90 text-white/90 text-xs lg:text-sm">
+        {% csrf_token %}
+
+        <div id="mobile-navbar" class="flex lg:hidden w-full bg-zinc-800/60 py-1 px-2 top-0">
+            <button id="collapse-button" class="h-10 w-10">
+                <img src="{% static 'images/buttons/mobile_menu_button.png' %}">
+            </button>
+        </div>
+
+        {% include 'password_alert.html' %}
+
+        {% include 'chat/user/user_profile.html' %}
+
+        {% include 'chat/modals/deletion_modal.html' %}
+
+        {% include 'chat/alert.html' %}
+
+        {% block content %}
+        
+        {% endblock %}
+
+        <script src="{% static 'js/main.js' %}"></script>
+        <script src="{% static 'js/chat/inbox.js' %}"></script>
+        {% block scripts %}
+        
+        {% endblock %}
+        <script src="{% static 'js/chat/modal.js' %}"></script>
+        <script src="{% static 'js/chat/mobile.js' %}"></script>
+        <script src="{% static 'js/chat/user_profile.js' %}"></script>
+    </body>
+{% endblock %}

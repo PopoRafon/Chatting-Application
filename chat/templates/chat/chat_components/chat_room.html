@@ -1,4 +1,4 @@
-{% extends 'chat/chat_components/base.html' %}
+{% extends 'chat/essential/base.html' %}
 
 {% load static %}
 
@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block main %}
-    {% include 'chat/chat_components/messages_container.html' %}
+    {% include 'chat/messages/messages_container.html' %}
     <div class="hidden lg:flex flex-col w-[350px] overflow-y-auto invisible-scrollbar h-screen text-center py-5 border border-zinc-700/30 bg-zinc-800/30">
         <div class="flex justify-center">
             <img src="{{ opposite_user.profile.avatar.url }}" class="rounded-full h-20 w-20 mr-2">

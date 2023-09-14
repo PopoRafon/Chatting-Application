@@ -17,9 +17,9 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost']
+ALLOWED_HOSTS = []
 
-# SQL Queries logger only for development purposes
+# SQL Queries logger only for query debugging purposes
 # LOGGING = {
 #     'version': 1,
 #     'filters': {
@@ -93,19 +93,26 @@ WSGI_APPLICATION = 'Chatting.wsgi.application'
 
 ASGI_APPLICATION = 'Chatting.asgi.application'
 
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            'hosts': [('127.0.0.1', 6379)],
-        },
-    },
-}
-
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated'
     ]
+}
+
+
+# Django Channels
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    },
+    # If you want to use Redis remove above configuration and use the one below instead
+    # 'default': {
+    #     'BACKEND': 'channels_redis.core.RedisChannelLayer',
+    #     'CONFIG': {
+    #         'hosts': [('127.0.0.1', 6379)],
+    #     },
+    # },
 }
 
 
@@ -114,16 +121,16 @@ REST_FRAMEWORK = {
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'OPTIONS': {
-            'read_default_file': 'Chatting/my.cnf'
-        }
-    }
-    # If you don't want to use mysql you can remove above configuration and use below instead
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    },
+    # If you want to use MySQL remove above configuration and use the one below instead
     # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': BASE_DIR / 'db.sqlite3',
-    # }
+    #     'ENGINE': 'django.db.backends.mysql',
+    #     'OPTIONS': {
+    #         'read_default_file': 'Chatting/my.cnf'
+    #     }
+    # },
 }
 
 
@@ -181,6 +188,7 @@ LOGIN_URL = '/login/'
 
 
 # Email Settings
+# When running DEBUG=FALSE set your EMAIL_USER and EMAIL_PASSWORD in .env file
 
 if DEBUG:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

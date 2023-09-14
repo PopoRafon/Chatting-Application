@@ -57,8 +57,8 @@ class AllChatMessagesAPIView(generics.ListCreateAPIView):
         messages = ChatMessage.objects.filter(chat__id=chat_id).prefetch_related('sender', 'sender__profile')
 
         if query_string:
-            start = query_string.get('start')
-            end = query_string.get('end')
+            start = query_string.get('start', 0)
+            end = query_string.get('end', -1)
 
             messages = messages[int(start):int(end)]
 

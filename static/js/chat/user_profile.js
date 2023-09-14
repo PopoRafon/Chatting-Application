@@ -45,7 +45,7 @@ saveUserProfileButton.addEventListener('click', () => {
     formData.append('email', email);
     formData.append('alias', alias);
     formData.append('description', description);
-    formData.append('avatar', avatar);
+    if (avatar) formData.append('avatar', avatar);
 
     fetch(`/api/v1/users/${id}`, {
         method: 'PATCH',

@@ -7,7 +7,7 @@ class TestRegistrationForm(TestCase):
 
     def test_registration_form_with_valid_data(self):
         form = RegistrationForm(data={
-            'email': 'testemail@gmail.com',
+            'email': 'testemail@example.com',
             'username': 'testusername',
             'password1': 'testpassword',
             'password2': 'testpassword',

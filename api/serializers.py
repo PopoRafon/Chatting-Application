@@ -26,8 +26,8 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         return super().update(instance, validated_data)
         
     def validate(self, data):
-        username = data.pop('username', None)
-        email = data.pop('email', None)
+        username = data.get('username', None)
+        email = data.get('email', None)
         check_username_in_db = User.objects.filter(username=username).first()
         check_email_in_db = User.objects.filter(email=email).first()
         context = self.context['request']
@@ -75,7 +75,7 @@ class ChatMessageSerializer(serializers.ModelSerializer):
 class ChatSerializer(serializers.ModelSerializer):
     class Meta:
         model = Chat
-        fields = '__all__'
+        fields = ['id']
 
 
 class RequestSerializer(serializers.ModelSerializer):
