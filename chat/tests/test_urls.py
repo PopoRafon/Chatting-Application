@@ -1,5 +1,5 @@
-from django.test import SimpleTestCase
 from django.urls import reverse, resolve
+from django.test import SimpleTestCase
 from chat import views
 
 

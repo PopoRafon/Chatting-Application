@@ -1,12 +1,12 @@
-from django.views.generic import TemplateView, CreateView
 from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView, PasswordResetView, PasswordResetConfirmView
-from django.contrib.auth.models import User
-from .forms import RegistrationForm, LoginForm
-from django.urls import reverse_lazy
-from django.shortcuts import redirect, render
 from django.contrib.auth import login, authenticate
-from django.http.response import JsonResponse
+from django.contrib.auth.models import User
 from django.contrib import messages 
+from django.views.generic import TemplateView, CreateView
+from django.shortcuts import redirect, render
+from django.http.response import JsonResponse
+from django.urls import reverse_lazy
+from .forms import RegistrationForm, LoginForm
 
 
 class HomeView(TemplateView):
@@ -25,7 +25,7 @@ class RegisterView(CreateView):
         return super().dispatch(request, *args, **kwargs)
     
     def form_invalid(self, form):
-        return JsonResponse({'errors': form.errors}, status=422)
+        return JsonResponse({'errors': form.errors}, status=400)
 
     def form_valid(self, form):
         response = super().form_valid(form)
@@ -48,9 +48,9 @@ class LoginView(LoginView):
     def form_invalid(self, form):
         if form.errors.get('__all__'):
             form.errors.pop('__all__')
-            form.errors['username'] = ["Credentials you provide are invalid."]
-            form.errors['password'] = ["Credentials you provide are invalid."]
-        return JsonResponse({'errors': form.errors}, status=422)
+            form.errors['username'] = ["Credentials you provided are invalid."]
+            form.errors['password'] = ["Credentials you provided are invalid."]
+        return JsonResponse({'errors': form.errors}, status=401)
 
 
 class LogoutView(LogoutView):
@@ -62,7 +62,7 @@ class PasswordChangeView(PasswordChangeView):
     template_name = 'main/password/password_change.html'
 
     def form_valid(self, form):
-        messages.success(self.request, 'Your password has been successfuly changed.')
+        messages.success(self.request, 'Your password has been successfully changed.')
         return super().form_valid(form)
 
 
@@ -81,9 +81,9 @@ class PasswordResetConfirmView(PasswordResetConfirmView):
     template_name = 'main/password/password_reset_confirm.html'
 
     def form_valid(self, form):
-        messages.success(self.request, 'Your password has been successfuly changed.')
+        messages.success(self.request, 'Your password has been successfully changed.')
         return super().form_valid(form)
 
 
-def terms_of_service_view(request):
-    return render(request, 'main/terms_of_service.html')
+class TermsOfServiceView(TemplateView):
+    template_name = 'main/terms_of_service.html'

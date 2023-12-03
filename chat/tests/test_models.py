@@ -1,6 +1,6 @@
+from django.contrib.auth.models import User
 from django.test import TestCase
 from chat.models import Chat, ChatMessage, Request
-from django.contrib.auth.models import User
 
 
 class TestChatModels(TestCase):

@@ -1,6 +1,6 @@
-from rest_framework.test import APITestCase, APIClient
-from django.urls import reverse
 from django.contrib.auth.models import User
+from django.urls import reverse
+from rest_framework.test import APITestCase, APIClient
 from chat.models import Chat, ChatMessage, Request
 
 
@@ -128,7 +128,7 @@ class TestSingleChatMessageViews(APITestCase):
         self.user = User.objects.create(username='user')
         self.chat = Chat.objects.create()
         self.message = ChatMessage.objects.create(chat=self.chat, sender=self.user, body='test message')
-        self.url = reverse('api-chat-messages-single', kwargs={'id': self.message.id, 'chat_id': self.chat.id})
+        self.url = reverse('api-chat-messages-single', kwargs={'message_id': self.message.id, 'chat_id': self.chat.id})
         self.put_body = {'body': 'new body'}
 
     def test_single_chat_message_GET(self):
@@ -150,7 +150,7 @@ class TestSingleChatMessageViews(APITestCase):
         second_user =  User.objects.create(username='second user')
         second_chat_message = ChatMessage.objects.create(chat=self.chat, sender=second_user, body='second test message')
 
-        second_message_url = reverse('api-chat-messages-single', kwargs={'id': second_chat_message.id, 'chat_id': self.chat.id})
+        second_message_url = reverse('api-chat-messages-single', kwargs={'message_id': second_chat_message.id, 'chat_id': self.chat.id})
 
         response = self.client.get(second_message_url)
         
@@ -177,7 +177,7 @@ class TestSingleChatMessageViews(APITestCase):
         second_user =  User.objects.create(username='second user')
         second_chat_message = ChatMessage.objects.create(chat=self.chat, sender=second_user, body='second test message')
 
-        second_message_url = reverse('api-chat-messages-single', kwargs={'id': second_chat_message.id, 'chat_id': self.chat.id})
+        second_message_url = reverse('api-chat-messages-single', kwargs={'message_id': second_chat_message.id, 'chat_id': self.chat.id})
 
         response = self.client.get(second_message_url)
 
@@ -193,7 +193,7 @@ class TestSingleChatMessageViews(APITestCase):
 
         second_chat_message = ChatMessage.objects.create(chat=self.chat, sender=second_user, body='second test message')
 
-        second_message_url = reverse('api-chat-messages-single', kwargs={'id': second_chat_message.id, 'chat_id': self.chat.id})
+        second_message_url = reverse('api-chat-messages-single', kwargs={'message_id': second_chat_message.id, 'chat_id': self.chat.id})
 
         response = self.client.delete(second_message_url)
 
@@ -220,7 +220,7 @@ class TestSingleChatMessageViews(APITestCase):
         second_user =  User.objects.create(username='second user')
         second_chat_message = ChatMessage.objects.create(chat=self.chat, sender=second_user, body='second test message')
 
-        second_message_url = reverse('api-chat-messages-single', kwargs={'id': second_chat_message.id, 'chat_id': self.chat.id})
+        second_message_url = reverse('api-chat-messages-single', kwargs={'message_id': second_chat_message.id, 'chat_id': self.chat.id})
 
         response = self.client.put(second_message_url, self.put_body)
 
@@ -236,7 +236,7 @@ class TestSingleChatMessageViews(APITestCase):
 
         second_chat_message = ChatMessage.objects.create(chat=self.chat, sender=second_user, body='second test body')
 
-        second_messsage_url = reverse('api-chat-messages-single', kwargs={'id': second_chat_message.id, 'chat_id': self.chat.id})
+        second_messsage_url = reverse('api-chat-messages-single', kwargs={'message_id': second_chat_message.id, 'chat_id': self.chat.id})
 
         response = self.client.put(second_messsage_url, self.put_body)
 

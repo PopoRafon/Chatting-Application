@@ -1,11 +1,11 @@
+from django.contrib.auth.tokens import default_token_generator
+from django.contrib.auth.models import User
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
 from django.test import TestCase
 from django.test.client import Client
 from django.urls import reverse
-from django.contrib.auth.models import User
 from django.core import mail
-from django.contrib.auth.tokens import default_token_generator
-from django.utils.http import urlsafe_base64_encode
-from django.utils.encoding import force_bytes
 
 
 class TestHomeViews(TestCase):
@@ -56,7 +56,7 @@ class TestRegisterView(TestCase):
     def test_register_view_POST_invalid_data(self):
         response = self.client.post(self.register_url, data={})
 
-        self.assertEqual(response.status_code, 422)
+        self.assertEqual(response.status_code, 400)
         self.assertEqual(User.objects.count(), 0)
 
     def test_register_view_POST_create_new_user(self):
@@ -106,7 +106,7 @@ class TestLoginView(TestCase):
     def test_login_view_POST_invalid_data(self):
         response = self.client.post(self.login_url, data={})
 
-        self.assertEqual(response.status_code, 422)
+        self.assertEqual(response.status_code, 401)
         self.assertNotIn('_auth_user_id', self.client.session)
 
     def test_login_view_POST_authenticated_user(self):

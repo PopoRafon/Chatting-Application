@@ -1,5 +1,5 @@
-from django.test import SimpleTestCase
 from django.urls import reverse, resolve
+from django.test import SimpleTestCase
 import main.views as views
 
 
@@ -33,7 +33,7 @@ class TestTermsOfServiceUrls(SimpleTestCase):
         url = reverse('terms-of-service')
         resolver = resolve(url)
 
-        self.assertEqual(resolver.func, views.terms_of_service_view)
+        self.assertEqual(resolver.func.view_class, views.TermsOfServiceView)
 
 
 class TestPasswordUrls(SimpleTestCase):

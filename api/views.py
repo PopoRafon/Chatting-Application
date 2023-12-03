@@ -1,25 +1,26 @@
-from .serializers import UserRetrieveSerializer, UserUpdateSerializer, ChatMessageSerializer, ChatSerializer, RequestSerializer
-from main.models import Profile
-from chat.models import Chat, ChatMessage, Request
-from rest_framework import generics, status
-from django.shortcuts import get_object_or_404
-from rest_framework.permissions import IsAuthenticated
-from .permissions import ChatMessageObjectPermissions, ChatMessageModelPermissions, ChatObjectPermissions, UserObjectPermissions
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
+from django.shortcuts import get_object_or_404
+from django.contrib.auth.models import User
+from rest_framework.generics import ListAPIView, RetrieveUpdateAPIView, ListCreateAPIView, CreateAPIView, DestroyAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.parsers import MultiPartParser
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework import status
+from chat.models import Chat, ChatMessage, Request
+from main.models import Profile
+from .permissions import ChatMessageObjectPermissions, ChatMessageModelPermissions, ChatObjectPermissions, UserObjectPermissions
+from .serializers import UserRetrieveSerializer, UserUpdateSerializer, ChatMessageSerializer, ChatSerializer, RequestSerializer
 
 
-class AllUsersAPIView(generics.ListAPIView):
+class AllUsersAPIView(ListAPIView):
     serializer_class = UserRetrieveSerializer
 
     def get_queryset(self):
         return Profile.objects.all().prefetch_related('user')
 
 
-class SingleUserAPIView(generics.RetrieveUpdateAPIView):
+class SingleUserAPIView(RetrieveUpdateAPIView):
     lookup_field = 'id'
     permission_classes = [IsAuthenticated, UserObjectPermissions]
     parser_classes = [MultiPartParser]
@@ -38,7 +39,7 @@ class SingleUserAPIView(generics.RetrieveUpdateAPIView):
             return self.serializer_class.get('retrieve')
 
 
-class AllChatMessagesAPIView(generics.ListCreateAPIView):
+class AllChatMessagesAPIView(ListCreateAPIView):
     serializer_class = ChatMessageSerializer
     permission_classes = [IsAuthenticated, ChatMessageModelPermissions]
 
@@ -65,8 +66,9 @@ class AllChatMessagesAPIView(generics.ListCreateAPIView):
         return messages
 
 
-class SingleChatMessageAPIView(generics.RetrieveUpdateDestroyAPIView):
+class SingleChatMessageAPIView(RetrieveUpdateDestroyAPIView):
     serializer_class = ChatMessageSerializer
+    lookup_url_kwarg = 'message_id'
     lookup_field = 'id'
     permission_classes = [IsAuthenticated, ChatMessageObjectPermissions]
 
@@ -74,7 +76,7 @@ class SingleChatMessageAPIView(generics.RetrieveUpdateDestroyAPIView):
         return ChatMessage.objects.all()
 
 
-class ChatAPIView(generics.DestroyAPIView):
+class ChatAPIView(DestroyAPIView):
     serializer_class = ChatSerializer
     lookup_field = 'id'
     permission_classes = [IsAuthenticated, ChatObjectPermissions]
@@ -83,7 +85,7 @@ class ChatAPIView(generics.DestroyAPIView):
         return Chat.objects.all()
 
 
-class RequestAPIView(generics.CreateAPIView):
+class RequestAPIView(CreateAPIView):
     serializer_class = RequestSerializer
     
     def post(self, request, *args, **kwargs):
@@ -112,7 +114,6 @@ class RequestAPIView(generics.CreateAPIView):
         except Exception:
             return Response({'error': 'Receiver you provided is invalid.'}, status=status.HTTP_404_NOT_FOUND)
 
-
     def perform_create(self, serializer):
         user = self.request.user
 
@@ -122,7 +123,6 @@ class RequestAPIView(generics.CreateAPIView):
 
 
 class RequestDecisionAPIView(APIView):
-
     def get(self, request, *args, **kwargs):
         try:
             user = request.user
@@ -152,13 +152,13 @@ class RequestDecisionAPIView(APIView):
                     chat = Chat.objects.create()
                     chat.users.add(user, sender)
 
-                    return Response({'success': 'Request was successfuly accepted and new chat has been created.'}, status=status.HTTP_201_CREATED)
+                    return Response({'success': 'Request was successfully accepted and new chat has been created.'}, status=status.HTTP_201_CREATED)
                 elif decision == 'reject':
                     request_obj.delete()
 
-                    return Response({'success': 'Request was successfuly rejected.'}, status=status.HTTP_200_OK)
+                    return Response({'success': 'Request was successfully rejected.'}, status=status.HTTP_200_OK)
                 else:
-                    return Response({'error': 'Decision needs to be either accept or reject.'}, status=status.HTTP_400_BAD_REQUEST)
+                    return Response({'error': 'Your response should be either accept or reject.'}, status=status.HTTP_400_BAD_REQUEST)
             else:
                 return self.permission_denied(request, 'You need to be request receiver to modify this request.')
         except ObjectDoesNotExist:

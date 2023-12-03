@@ -1,7 +1,7 @@
-from rest_framework import serializers
-from main.models import Profile
-from chat.models import ChatMessage, Chat, Request
 from django.contrib.auth.models import User
+from rest_framework import serializers
+from chat.models import ChatMessage, Chat, Request
+from main.models import Profile
 
 
 class UserUpdateSerializer(serializers.ModelSerializer):

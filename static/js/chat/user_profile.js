@@ -1,8 +1,8 @@
 const showUserProfileButton = document.getElementById('show-user-profile-button');
-const userProfileContainer = document.getElementById('user-profile-container')
 const hideUserProfileButton = document.getElementById('hide-user-profile-button');
-const profileEditButtons = document.querySelectorAll('.profile-edit-button');
 const saveUserProfileButton = document.getElementById('save-user-profile-button');
+const userProfileContainer = document.getElementById('user-profile-container')
+const profileEditButtons = document.querySelectorAll('.profile-edit-button');
 const mobileNavbar = document.getElementById('mobile-navbar');
 
 
@@ -16,7 +16,7 @@ hideUserProfileButton.addEventListener('click', () => {
     if (mobileNavbar) mobileNavbar.classList.toggle('hidden');
 })
 
-profileEditButtons.forEach(button => {
+profileEditButtons.forEach((button) => {
     const fieldEditType = button.getAttribute('data-edit-type');
     const field = document.getElementById(`edit-profile-${fieldEditType}`);
     let initialText = field.textContent;

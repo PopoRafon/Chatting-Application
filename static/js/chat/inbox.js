@@ -1,11 +1,11 @@
 const addNewChatButton = document.getElementById('add-new-chat-button');
-const addNewChatBox = document.getElementById('add-new-chat-box');
-const addNewChatForm = document.getElementById('add-new-chat-form');
-const inboxButton = document.getElementById('inbox-button');
-const inbox = document.getElementById('inbox');
 const requestButtons = document.querySelectorAll('.request-button');
-const alertBox = document.getElementById('alert-box');
+const addNewChatForm = document.getElementById('add-new-chat-form');
+const addNewChatBox = document.getElementById('add-new-chat-box');
 const alertMessage = document.getElementById('alert-message');
+const inboxButton = document.getElementById('inbox-button');
+const alertBox = document.getElementById('alert-box');
+const inbox = document.getElementById('inbox');
 
 
 requestButtons.forEach((button) => {
@@ -13,21 +13,19 @@ requestButtons.forEach((button) => {
         const id = button.getAttribute('data-request-id');
         const requestBox = document.getElementById(`request-${id}`)
         const decision = button.getAttribute('data-request-decision');
-        const csrftoken = getCookie('csrftoken');
+        const csrfToken = getCookie('csrftoken');
 
         fetch(`/api/v1/requests/${id}`, {
             method: 'POST',
             headers: {
-                'X-CSRFToken': csrftoken,
+                'X-CSRFToken': csrfToken,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
                 decision: decision
             })
         })
-        .then((response) => {
-            return response.json();
-        })
+        .then(response => response.json())
         .then((data) => {
             if (data.success) {
                 const body = data.success;
@@ -61,26 +59,22 @@ addNewChatForm.addEventListener('submit', (event) => {
 
     const userToRequest = document.getElementById('user-to-request');
     const userIdentifier = userToRequest.value;
-    const csrftoken = getCookie('csrftoken');
+    const csrfToken = getCookie('csrftoken');
 
     fetch('/api/v1/requests', {
         method: 'POST',
         headers: {
-            'X-CSRFToken': csrftoken,
+            'X-CSRFToken': csrfToken,
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-            receiver: userIdentifier
-        })
+        body: JSON.stringify({ receiver: userIdentifier })
     })
-    .then((response) => {
-        return response.json();
-    })
+    .then(response => response.json())
     .then((data) => {
         console.log(data);
     })
     .catch(error => {
-        console.log(error)
+        console.log(error);
     })
 
     userToRequest.value = '';

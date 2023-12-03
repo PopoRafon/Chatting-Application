@@ -1,9 +1,8 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
-from .models import Chat, ChatMessage
-from main.models import Profile
 from channels.db import database_sync_to_async
-from .permissions import has_chat_access
+from main.models import Profile
+from .models import Chat, ChatMessage
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
@@ -11,15 +10,15 @@ class ChatConsumer(AsyncWebsocketConsumer):
         try:
             self.chat_name = self.scope['url_route']['kwargs']['chat_name']
             self.chat_group_name = f'chat_{self.chat_name}'
+            self.user = self.scope['user']
+            self.chat = await database_sync_to_async(Chat.objects.prefetch_related('users').get)(id=self.chat_name)
 
-            if not await has_chat_access(self.scope['user'], self.chat_name):
-                await self.close()
-            else:
-                self.chat_instance = await database_sync_to_async(Chat.objects.get)(id=self.chat_name)
-
+            if self.user in self.chat.users.all():
                 await self.channel_layer.group_add(self.chat_group_name, self.channel_name)
 
                 await self.accept()
+            else:
+                await self.close()
         except Exception:
             await self.close()
 
@@ -29,67 +28,24 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         action_type = text_data_json['type']
-        user = self.scope['user']
 
-        if action_type == 'send_message':
-            await self.create_message(user, text_data_json['message'])
-        elif action_type == 'delete_message':
-            await self.delete_message(user, text_data_json['message_id'])
-        elif action_type == 'modify_message':
-            await self.modify_message(user, text_data_json['message_id'], text_data_json['body'])
-        else:
-            await self.channel_layer.group_send(self.chat_group_name, {
-                'type': 'send_error'
-            })
+        match action_type:
+            case 'send_message':
+                await self.create_message(text_data_json)
+            case 'delete_message':
+                await self.delete_message(text_data_json)
+            case 'modify_message':
+                await self.modify_message(text_data_json)
+            case _:
+                await self.send_error()
 
-    async def send_error(self, event):
-        await self.send(json.dumps({
-            'error': 'Provided action type is not supported.'
-        }))
+    async def create_message(self, data):
+        received_message = data['message']
 
-    async def send_created_message(self, event):
-        id = event['id']
-        sender = event['sender']
-        body = event['body']
-        avatar = event['avatar']
-        created = event['created']
+        if await self.validate_message_content(received_message):
+            profile = await database_sync_to_async(Profile.objects.get)(user=self.user)
 
-        await self.send(json.dumps({
-            'message_created': 'Message was successfuly created.',
-            'id': id,
-            'sender': sender,
-            'body': body,
-            'avatar': avatar,
-            'created': created
-        }))
-
-    async def send_deleted_message(self, event):
-        id = event['id']
-
-        await self.send(json.dumps({
-            'message_deleted': 'Message was successfuly deleted.',
-            'id': id
-        }))
-
-    async def send_modified_message(self, event):
-        id = event['id']
-        time = event['time']
-        body = event['body']
-
-        await self.send(json.dumps({
-            'message_modified': 'Message was successfuly modified.',
-            'id': id,
-            'time': time,
-            'body': body
-        }))
-
-    async def create_message(self, user, received_message):
-        try:
-            if len(received_message) >= 511 or len(received_message.replace(' ', '').replace('\n', '')) == 0: return
-
-            profile = await database_sync_to_async(Profile.objects.get)(user=user)
-
-            message = await database_sync_to_async(ChatMessage.objects.create)(chat=self.chat_instance, sender=user, body=received_message)
+            message = await database_sync_to_async(ChatMessage.objects.create)(chat=self.chat, sender=self.user, body=received_message)
 
             await self.channel_layer.group_send(self.chat_group_name, {
                 'type': 'send_created_message',
@@ -99,27 +55,27 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 'avatar': profile.avatar.url,
                 'created': message.created.strftime("%Y-%m-%d %H:%M")
             })
-        except Exception:
-            return
+        else:
+            await self.send_error()
 
-    async def delete_message(self, user, message_id):
-        try:
-            message = await database_sync_to_async(ChatMessage.objects.get)(id=message_id, sender=user)
+    async def delete_message(self, data):
+        message_id = data['message_id']
 
-            await message.adelete()
+        message = await database_sync_to_async(ChatMessage.objects.get)(id=message_id, sender=self.user)
 
-            await self.channel_layer.group_send(self.chat_group_name, {
-                'type': 'send_deleted_message',
-                'id': message_id
-            })
-        except Exception:
-            return
+        await message.adelete()
+
+        await self.channel_layer.group_send(self.chat_group_name, {
+            'type': 'send_deleted_message',
+            'id': message_id
+        })
         
-    async def modify_message(self, user, message_id, body):
-        try:
-            if len(body) >= 511 or len(body.replace(' ', '').replace('\n', '')) == 0: return
+    async def modify_message(self, data):
+        message_id = data['message_id']
+        body = data['body']
 
-            message = await database_sync_to_async(ChatMessage.objects.get)(id=message_id, sender=user)
+        if await self.validate_message_content(body):
+            message = await database_sync_to_async(ChatMessage.objects.get)(id=message_id, sender=self.user)
 
             message.body = body
 
@@ -131,5 +87,51 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 'time': message.modified.strftime("%H:%M"),
                 'body': body
             })
-        except Exception:
-            return
+        else:
+            await self.send_error()
+
+    async def send_error(self):
+        await self.send(json.dumps({
+            'type': 'error',
+            'message': 'Error occurred when trying to process your request.'
+        }))
+
+    async def send_created_message(self, event):
+        _, id, sender, body, avatar, created = event.values()
+
+        await self.send(json.dumps({
+            'type': 'message_created',
+            'id': id,
+            'sender': sender,
+            'body': body,
+            'avatar': avatar,
+            'created': created
+        }))
+
+    async def send_deleted_message(self, event):
+        id = event['id']
+
+        await self.send(json.dumps({
+            'type': 'message_deleted',
+            'id': id
+        }))
+
+    async def send_modified_message(self, event):
+        _, id, time, body = event.values()
+
+        await self.send(json.dumps({
+            'type': 'message_modified',
+            'id': id,
+            'time': time,
+            'body': body
+        }))
+
+    async def validate_message_content(self, message):
+        """
+        Method validates received message content.
+        Returns True if all validations pass otherwise returns False.
+        """
+        if len(message) >= 511: return False
+        if len(message.replace(' ', '').replace('\n', '')) == 0: return False
+
+        return True

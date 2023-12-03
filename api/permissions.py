@@ -1,7 +1,7 @@
-from rest_framework import permissions
-from chat.models import Chat
 from django.core.exceptions import ObjectDoesNotExist
 from django.http.response import Http404
+from rest_framework import permissions
+from chat.models import Chat
 
 
 class ChatMessageObjectPermissions(permissions.BasePermission):

@@ -8,8 +8,8 @@ room.classList.replace('hover:bg-zinc-700/30', 'bg-zinc-900/40');
 
 addEditButtonsListeners(editButtons);
 
-messageInput.addEventListener('input', function() {
-    if (this.scrollHeight >= 304) return;
+messageInput.addEventListener('input', () => {
+    if (this.scrollHeight < 304) return;
     this.style.height = 'auto';
     this.style.height = `${this.scrollHeight}px`;
 })
@@ -44,10 +44,7 @@ function addMessageToChat(data, oldMessage) {
     const yesterday = `${date.getFullYear()}-${("0" + (date.getMonth() + 1)).slice(-2)}-${("0" + (date.getDate()-1)).slice(-2)}`;
 
     for (const message of data) {
-        const id = message.id;
-        const body = message.body;
-        const sender = message.sender;
-        const avatar = message.avatar;
+        const { id, body, sender, avatar } = message;
         const created = message.created.split(" ");
         let wasCreated;
 
@@ -66,36 +63,38 @@ function addMessageToChat(data, oldMessage) {
         newMessage.classList.add('flex', 'relative', 'group/toolbar', 'rounded-xl', 'hover:bg-zinc-800/30', 'px-2', 'mt-4');
 
         newMessage.innerHTML += `
-        <div class="top-0 left-0 h-full w-12 mr-1 mt-1">
-            <img src="${avatar}" class="rounded-full h-11 w-11">
-        </div>
-        <div class="w-full overflow-y-auto invisible-scrollbar">
-            <div class="block px-1">
-                <span class="text-sm lg:text-[15px] font-semibold cursor-pointer hover:underline">${sender}</span>
-                <span class="text-[11px] lg:text-xs text-zinc-500">${wasCreated} ${created[1]}</span>
+            <div class="top-0 left-0 h-full w-12 mr-1 mt-1">
+                <img src="${avatar}" class="rounded-full h-11 w-11">
             </div>
-            <div>
+            <div class="w-full overflow-y-auto invisible-scrollbar">
+                <div class="block px-1">
+                    <span class="text-sm lg:text-[15px] font-semibold cursor-pointer hover:underline">${sender}</span>
+                    <span class="text-[11px] lg:text-xs text-zinc-500">${wasCreated} ${created[1]}</span>
+                </div>
                 <div>
-                    <p id="message-${id}-body" class="text-sm lg:text-[15px] block whitespace-pre-line break-words px-1 rounded-lg focus:outline-none" contenteditable="false">${body}</p>
-                </div>
-                <div id="message-${id}-modified" class="text-xs w-1/6 px-1">
+                    <div>
+                        <p id="message-${id}-body" class="text-sm lg:text-[15px] block whitespace-pre-line break-words px-1 rounded-lg focus:outline-none" contenteditable="false">${body}</p>
+                    </div>
+                    <div id="message-${id}-modified" class="text-xs w-1/6 px-1">
+                    </div>
                 </div>
             </div>
-        </div>`;
+        `;
 
         if (user === sender) {
             newMessage.innerHTML += `
-            <div class="hidden absolute group-hover/toolbar:inline-flex top-0 right-0 mr-2 rounded-md transform -translate-y-1/2 text-center bg-zinc-700 border border-zinc-800">
-                <button class="flex justify-center items-center p-1 rounded-tl-md rounded-bl-md hover:bg-zinc-600">
-                    <img src="/static/images/buttons/add_emote_button.png" class="w-5 h-5">
-                </button>
-                <button class="edit-button flex justify-center items-center p-1 hover:bg-zinc-600" data-message-id="${id}">
-                    <img src="/static/images/buttons/edit_message_button.png" class="w-5 h-5">
-                </button>
-                <button class="modal-button flex justify-center items-center p-1 rounded-tr-md rounded-br-md hover:bg-zinc-600" data-message-id="${id}">
-                    <img src="/static/images/buttons/delete_message_button.png" class="w-5 h-5">
-                </button>
-            </div>`;
+                <div class="hidden absolute group-hover/toolbar:inline-flex top-0 right-0 mr-2 rounded-md transform -translate-y-1/2 text-center bg-zinc-700 border border-zinc-800">
+                    <button class="flex justify-center items-center p-1 rounded-tl-md rounded-bl-md hover:bg-zinc-600">
+                        <img src="/static/images/icons/add_emote_icon.png" class="w-5 h-5">
+                    </button>
+                    <button class="edit-button flex justify-center items-center p-1 hover:bg-zinc-600" data-message-id="${id}">
+                        <img src="/static/images/icons/edit_message_icon.png" class="w-5 h-5">
+                    </button>
+                    <button class="modal-button flex justify-center items-center p-1 rounded-tr-md rounded-br-md hover:bg-zinc-600" data-message-id="${id}">
+                        <img src="/static/images/icons/delete_message_icon.png" class="w-5 h-5">
+                    </button>
+                </div>
+            `;
         }
 
         fragment.appendChild(newMessage);

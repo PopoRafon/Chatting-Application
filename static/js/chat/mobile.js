@@ -1,5 +1,5 @@
-const collapseButton = document.getElementById('collapse-button');
 const privateMessagesSidebar = document.getElementById('private-messages-sidebar');
+const collapseButton = document.getElementById('collapse-button');
 const chatContainer = document.getElementById('chat-container');
 
 

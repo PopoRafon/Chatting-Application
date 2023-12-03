@@ -1,9 +1,9 @@
 const modalDeleteButton = document.getElementById('delete-message-button');
-const modalButtons = document.querySelectorAll('.modal-button');
+const conversationSearch = document.getElementById('conversation-search');
 const deletionModal = document.getElementById('deletion-modal');
+const modalButtons = document.querySelectorAll('.modal-button');
 const cancelButton = document.getElementById('cancel-button');
 const exitButton = document.getElementById('exit-button');
-const conversationSearch = document.getElementById('conversation-search');
 const chatsList = document.getElementById('chats-list');
 
 

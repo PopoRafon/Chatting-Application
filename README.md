@@ -35,7 +35,7 @@ Real-time chatting application to chat with your friends built with Python and D
 * Real-time communication using WebSockets.
 * Well described API using OpenAPI specifications with many endpoints to play with.
 * Tests providing convenient way to debug your application.
-* Interface compatible with desktop PCs and mobile phones. 
+* Fully responsive user interface. 
 ## Testing
 If you want to test your application you can run `python3 manage.py test` command in your application main directory. Also you can create your own tests in each of the "tests" directories.
 ## Author

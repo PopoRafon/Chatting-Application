@@ -7,7 +7,7 @@
                 My account
             </span>
             <button id="hide-user-profile-button" class="absolute w-8 h-8 right-1 top-1">
-                <img src="{% static 'images/buttons/reject_request_button.png' %}">
+                <img src="{% static 'images/icons/reject_request_icon.png' %}">
             </button>
         </div>
         <div class="flex w-full h-full justify-center text-base">
@@ -16,7 +16,7 @@
                     <img src="{{ request.user.profile.avatar.url }}" class="h-40 w-40 mx-auto rounded-full">
                     <div>
                         <label for="edit-profile-avatar" class="absolute border border-zinc-700 bg-zinc-700 rounded-lg right-[calc(32%)] bottom-1 h-7 w-7 cursor-pointer">
-                            <img src="{% static 'images/buttons/edit_message_button.png' %}">
+                            <img src="{% static 'images/icons/edit_message_icon.png' %}">
                         </label>
                         <input id="edit-profile-avatar" type="file" class="hidden">
                     </div>

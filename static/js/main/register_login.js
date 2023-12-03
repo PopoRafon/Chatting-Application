@@ -1,7 +1,7 @@
 const form = document.getElementById('form');
 
 
-form.addEventListener('submit', function(event) {
+form.addEventListener('submit', (event) => {
     event.preventDefault();
 
     sendFormData();
@@ -15,7 +15,7 @@ function sendFormData() {
     fetch(url, {
         method: 'POST',
         headers: {
-            'X-CSRFToken': csrftoken,
+            'X-CSRFToken': csrftoken
         },
         body: data
     })
@@ -26,7 +26,7 @@ function sendFormData() {
             return response.json();
         }
     })
-    .then(data => {
+    .then((data) => {
         const errors = data.errors;
         const inputFields = form.querySelectorAll('.invalid-form-input');
 
@@ -49,7 +49,7 @@ function sendFormData() {
             paragraph.classList.replace('invisible', 'visible');
         }
     })
-    .catch(error => {
+    .catch((error) => {
         console.log(error);
     })
 }

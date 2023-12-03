@@ -6,8 +6,8 @@ const socket = new WebSocket(
     + '/ws/chat/'
     + roomName
     + '/'
-);
+)
 
-socket.onclose = function(event) {
+socket.onclose = (event) => {
     console.log("Exiting socket connection.");
-};
+}

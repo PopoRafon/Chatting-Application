@@ -1,17 +1,17 @@
 {% load static %}
 
-<div id="private-messages-sidebar" class="left-0 bottom-0 z-40 absolute lg:static lg:-translate-x-0 text-base flex flex-col items-center lg:top-0 lg:left-0 w-64 h-[calc(100vh-3rem)] lg:h-screen transition-transform border-r border-zinc-700/30 -translate-x-[calc(16rem)]" style="background-color: #2d2d2f">
+<div id="private-messages-sidebar" class="left-0 bottom-0 z-40 absolute lg:static lg:-translate-x-0 text-base flex flex-col items-center lg:top-0 lg:left-0 w-64 h-[calc(100vh-3rem)] lg:h-screen transition-transform border-r border-zinc-700/30 -translate-x-[calc(16rem)] shadow-md" style="background-color: #2d2d2f">
     <div class="w-full">
         <div class="z-20 space-y-3 text-center justify-center py-3 sticky top-0 border-b border-zinc-700/30" style="background-color: #2d2d2f">
             <input id="conversation-search" type="text" placeholder="Search for conversation" class="rounded-full py-1 px-3 placeholder:text-center focus:placeholder:text-transparent focus:outline-none bg-zinc-700/70">
             <div class="flex justify-center mb-3">
                 <button id="inbox-button" class="flex justify-center items-center absolute left-2 self-center group/inbox">
-                    <img src="{% static 'images/buttons/notification_button.png' %}" class="h-4 w-4">
+                    <img src="{% static 'images/icons/notification_icon.png' %}" class="h-4 w-4">
                     <span class="hidden absolute rounded-md group-hover/inbox:flex bg-zinc-700 text-white py-1 w-[calc(50px)] -translate-y-7 translate-x-3 text-sm justify-center">Inbox</span>
                 </button>
                 <span>Private messages</span>
                 <button id="add-new-chat-button" class="flex justify-center items-center absolute right-2 self-center group/tooltip">
-                    <img src="{% static 'images/buttons/add_new_chat.png' %}" class="h-4 w-4">
+                    <img src="{% static 'images/icons/add_new_chat_icon.png' %}" class="h-4 w-4">
                     <span class="hidden absolute rounded-md group-hover/tooltip:flex bg-zinc-700 text-white py-1 w-[calc(120px)] -translate-y-7 text-sm justify-center">Create new chat</span>
                 </button>
             </div>
@@ -24,10 +24,10 @@
                             <span>{{ request.content }}</span>
                             <div>
                                 <button class="request-button" data-request-id="{{ request.id }}" data-request-decision="accept">
-                                    <img src="{% static 'images/buttons/accept_request_button.png' %}" class="h-5 w-5">
+                                    <img src="{% static 'images/icons/accept_request_icon.png' %}" class="h-5 w-5">
                                 </button>
                                 <button class="request-button" data-request-id="{{ request.id }}" data-request-decision="reject">
-                                    <img src="{% static 'images/buttons/reject_request_button.png' %}" class="h-5 w-5">
+                                    <img src="{% static 'images/icons/reject_request_icon.png' %}" class="h-5 w-5">
                                 </button>
                             </div>
                             </li>
@@ -56,7 +56,7 @@
                             {% endfor %}
                         </a>
                         <button class="modal-button hidden absolute group-hover/chat:flex right-0 mr-2 self-center rounded-md" data-chat-id="{{ chat.id }}">
-                            <img src="{% static 'images/buttons/delete_message_button.png' %}" class="w-4 h-4">
+                            <img src="{% static 'images/icons/delete_message_icon.png' %}" class="w-4 h-4">
                         </button>
                     </li>
                 {% endfor %}
@@ -68,7 +68,7 @@
                 <span class="my-auto truncate">{{ request.user.profile.alias }}</span>
             </button>
             <a href="{% url 'logout' %}" class="absolute bottom-[calc(14px)] right-2">
-                <img src="{% static 'images/buttons/logout_button.png' %}" class="h-5 w-5">
+                <img src="{% static 'images/icons/logout_icon.png' %}" class="h-5 w-5">
             </a>
         </div>
     </div>

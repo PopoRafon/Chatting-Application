@@ -1,7 +1,7 @@
 from django.views.generic import TemplateView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import Chat
 from django.shortcuts import redirect
+from .models import Chat
 
 
 class ChatHomeView(LoginRequiredMixin, TemplateView):

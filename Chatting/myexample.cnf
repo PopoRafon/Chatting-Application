@@ -1,5 +1,5 @@
 [client]
-database = 
-user = 
-password = 
+database = yourdatabasename
+user = yourusername
+password = yourpassword
 default-character-set = utf8

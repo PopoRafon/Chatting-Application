@@ -2,7 +2,7 @@ const chat = document.getElementById('messages-container');
 let blockNewRequests = false;
 
 
-chat.addEventListener('scroll', async function() {
+chat.addEventListener('scroll', async () => {
     if (!blockNewRequests && -(this.scrollTop) + this.clientHeight >= this.scrollHeight-100) {
         blockNewRequests = true;
 
@@ -13,9 +13,7 @@ chat.addEventListener('scroll', async function() {
         await fetch(url, {
             method: 'GET'
         })
-        .then((response) => {
-            return response.json();
-        })
+        .then(response => response.json())
         .then(async (data) => {
             if (data.error) {
                 console.log(data.error);
@@ -53,20 +51,22 @@ function modifyMessageRequest(id, body) {
         'type': 'modify_message',
         'message_id': id,
         'body': body
-    }))
+    }));
 }
 
-socket.onmessage = function(event) {
+socket.onmessage = (event) => {
     const data = JSON.parse(event.data);
 
-    if (data.error) {
-        console.log(data.error);
-        return;
-    } else if (data.message_deleted) {
-        deleteMessageFromChat(data);
-    } else if (data.message_created) {
-        addMessageToChat([data], false);
-    } else if (data.message_modified) {
-        modifyMessageFromChat(data);
+    switch (data.type) {
+        case 'error':
+            return console.log(data.error);
+        case 'message_created':
+            return addMessageToChat([data], false);
+        case 'message_deleted':
+            return deleteMessageFromChat(data);
+        case 'message_modified':
+            return modifyMessageFromChat(data);
+        default:
+            throw new Error('Invalid socket message type.');
     }
-};
+}

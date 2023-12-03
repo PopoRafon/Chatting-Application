@@ -1,6 +1,6 @@
+from django.urls import reverse, resolve
 from rest_framework.test import APISimpleTestCase
 from api import views
-from django.urls import reverse, resolve
 
 
 class TestUserUrls(APISimpleTestCase):
@@ -30,7 +30,7 @@ class TestChatMessageUrls(APISimpleTestCase):
         self.assertEqual(resolver.func.view_class, views.AllChatMessagesAPIView)
 
     def test_single_chat_message_url_resolves(self):
-        url = reverse('api-chat-messages-single', kwargs={'chat_id': 1, 'id': 1})
+        url = reverse('api-chat-messages-single', kwargs={'chat_id': 1, 'message_id': 1})
 
         resolver = resolve(url)
 
