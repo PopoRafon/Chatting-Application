@@ -4,7 +4,6 @@ import main.views as views
 
 
 class TestHomeUrls(SimpleTestCase):
-
     def test_home_view_url_resolves(self):
         url = reverse('home')
         resolver = resolve(url)
@@ -13,7 +12,6 @@ class TestHomeUrls(SimpleTestCase):
 
 
 class TestAccountUrls(SimpleTestCase):
-
     def test_register_url_resolves(self):
         url = reverse('register')
         resolver = resolve(url)
@@ -28,7 +26,6 @@ class TestAccountUrls(SimpleTestCase):
 
 
 class TestTermsOfServiceUrls(SimpleTestCase):
-
     def test_terms_of_service_url_resolves(self):
         url = reverse('terms-of-service')
         resolver = resolve(url)
@@ -37,7 +34,6 @@ class TestTermsOfServiceUrls(SimpleTestCase):
 
 
 class TestPasswordUrls(SimpleTestCase):
-
     def test_password_change_url_resolves(self):
         url = reverse('password-change')
         resolver = resolve(url)

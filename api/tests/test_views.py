@@ -1,13 +1,11 @@
 from django.contrib.auth.models import User
 from django.urls import reverse
-from rest_framework.test import APITestCase, APIClient
+from rest_framework.test import APITestCase
 from chat.models import Chat, ChatMessage, Request
 
 
 class TestUserViews(APITestCase):
-
     def setUp(self):
-        self.client = APIClient()
         self.first_user = User.objects.create(username='first user')
         self.second_user = User.objects.create(username='second user')
         self.url = reverse('api-users-all')
@@ -26,9 +24,7 @@ class TestUserViews(APITestCase):
 
 
 class TestSingleUserViews(APITestCase):
-
     def setUp(self):
-        self.client = APIClient()
         self.user = User.objects.create(username='user')
         self.url = reverse('api-users-single', kwargs={'id': self.user.id})
 
@@ -46,9 +42,7 @@ class TestSingleUserViews(APITestCase):
 
 
 class TestAllChatMessagesViews(APITestCase):
-
     def setUp(self):
-        self.client = APIClient()
         self.user = User.objects.create(username='first user')
         self.chat = Chat.objects.create()
         self.message = ChatMessage.objects.create(chat=self.chat, sender=self.user, body='first test message')
@@ -122,9 +116,7 @@ class TestAllChatMessagesViews(APITestCase):
 
 
 class TestSingleChatMessageViews(APITestCase):
-
     def setUp(self):
-        self.client = APIClient()
         self.user = User.objects.create(username='user')
         self.chat = Chat.objects.create()
         self.message = ChatMessage.objects.create(chat=self.chat, sender=self.user, body='test message')
@@ -254,9 +246,7 @@ class TestSingleChatMessageViews(APITestCase):
 
 
 class TestChatViews(APITestCase):
-
     def setUp(self):
-        self.client = APIClient()
         self.user = User.objects.create(username='user')
         self.chat = Chat.objects.create()
         self.url = reverse('api-chat', kwargs={'id': self.chat.id})
@@ -286,9 +276,7 @@ class TestChatViews(APITestCase):
 
 
 class TestRequestView(APITestCase):
-
     def setUp(self):
-        self.client = APIClient()
         self.first_user = User.objects.create(username='first user')
         self.second_user = User.objects.create(username='second user')
         self.url = reverse('api-request')
@@ -358,9 +346,7 @@ class TestRequestView(APITestCase):
 
 
 class TestRequestDecisionView(APITestCase):
-
     def setUp(self):
-        self.client = APIClient()
         self.first_user = User.objects.create(username='first user')
         self.second_user = User.objects.create(username='second user')
         self.post_body_accept = {'decision': 'accept'}

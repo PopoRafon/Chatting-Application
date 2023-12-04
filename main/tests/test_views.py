@@ -3,15 +3,12 @@ from django.contrib.auth.models import User
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.test import TestCase
-from django.test.client import Client
 from django.urls import reverse
 from django.core import mail
 
 
 class TestHomeViews(TestCase):
-
     def setUp(self):
-        self.client = Client()
         self.home_url = reverse('home')
 
     def test_home_view_GET(self):
@@ -22,9 +19,7 @@ class TestHomeViews(TestCase):
         
 
 class TestRegisterView(TestCase):
-
     def setUp(self):
-        self.client = Client()
         self.register_url = reverse('register')
 
     def test_register_view_GET(self):
@@ -73,9 +68,7 @@ class TestRegisterView(TestCase):
 
 
 class TestLoginView(TestCase):
-
     def setUp(self):
-        self.client = Client()
         self.user = User.objects.create_user(username='test', password='testpassword')
         self.login_url = reverse('login')
 
@@ -130,9 +123,7 @@ class TestLoginView(TestCase):
 
 
 class TestPasswordViews(TestCase):
-
     def setUp(self):
-        self.client = Client()
         self.user = User.objects.create_user(email='test@gmail.com', username='test', password='testpassword')
         self.password_change_url = reverse('password-change')
         self.password_reset_url = reverse('password-reset')

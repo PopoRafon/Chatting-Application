@@ -4,7 +4,6 @@ from main.forms import RegistrationForm, LoginForm
 
 
 class TestRegistrationForm(TestCase):
-
     def test_registration_form_with_valid_data(self):
         form = RegistrationForm(data={
             'email': 'testemail@example.com',
@@ -23,7 +22,6 @@ class TestRegistrationForm(TestCase):
 
 
 class TestLoginForm(TestCase):
-
     def setUp(self):
         self.user = User.objects.create_user(username='test', password='testpassword')
 

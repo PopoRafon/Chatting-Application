@@ -75,18 +75,21 @@ class ChatConsumer(AsyncWebsocketConsumer):
         body = data['body']
 
         if await self.validate_message_content(body):
-            message = await database_sync_to_async(ChatMessage.objects.get)(id=message_id, sender=self.user)
+            message = await database_sync_to_async(ChatMessage.objects.prefetch_related('sender').get)(id=message_id)
 
-            message.body = body
+            if message.sender == self.user:
+                message.body = body
 
-            await message.asave()
+                await message.asave()
 
-            await self.channel_layer.group_send(self.chat_group_name, {
-                'type': 'send_modified_message',
-                'id': message_id,
-                'time': message.modified.strftime("%H:%M"),
-                'body': body
-            })
+                await self.channel_layer.group_send(self.chat_group_name, {
+                    'type': 'send_modified_message',
+                    'id': message_id,
+                    'time': message.modified.strftime("%H:%M"),
+                    'body': body
+                })
+            else:
+                await self.send_error()
         else:
             await self.send_error()
 

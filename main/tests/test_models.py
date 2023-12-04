@@ -4,7 +4,6 @@ from main.models import Profile
 
 
 class TestUserModels(TestCase):
-
     def setUp(self):
         self.user = User.objects.create(username='test')
 

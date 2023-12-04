@@ -1,13 +1,11 @@
 from django.contrib.auth.models import User
-from django.test import TestCase, Client
+from django.test import TestCase
 from django.urls import reverse
 from chat.models import Chat
 
 
 class TestChatViews(TestCase):
-
     def setUp(self):
-        self.client = Client()
         self.user = User.objects.create(username='test')
         self.chat = Chat.objects.create()
         self.chat_home_url = reverse('chat-home')

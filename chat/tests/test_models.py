@@ -4,7 +4,6 @@ from chat.models import Chat, ChatMessage, Request
 
 
 class TestChatModels(TestCase):
-
     def setUp(self):
         self.first_user = User.objects.create(username='first_user')
         self.second_user = User.objects.create(username='second_user')
@@ -23,7 +22,6 @@ class TestChatModels(TestCase):
 
 
 class TestRequestModels(TestCase):
-
     def setUp(self):
         self.first_user = User.objects.create(username='first_user')
         self.second_user = User.objects.create(username='second_user')
